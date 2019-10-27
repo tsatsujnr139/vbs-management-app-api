@@ -1,6 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
+from core import models
+
 
 def sample_user(email='user@email.com', password='samplepassword'):
     """create a sample user"""
@@ -43,3 +45,22 @@ class ModelTests(TestCase):
 
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)
+
+    def test_grade_str(self):
+        """test grade string representation"""
+        grade = models.Grade.objects.create(
+            name='Class 1',
+        )
+
+        self.assertEqual(str(grade),
+                         grade.name)
+
+    # def test_particpant_str(self):
+    #     """test particpant string representation"""
+    #     participant = models.Participant.create(
+    #         first_name='Ama',
+    #         last_name='Sika'
+    #     )
+
+    #     self.assertEqual(str(participant),
+    #                      participant.first_name + " " + participant.last_name)

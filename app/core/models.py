@@ -33,3 +33,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+
+class Grade(models.Model):
+    """ model for educational grade/class of a participant"""
+    name = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
