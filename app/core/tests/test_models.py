@@ -63,4 +63,4 @@ class ModelTests(TestCase):
     #     )
 
     #     self.assertEqual(str(participant),
-    #                      participant.first_name + " " + participant.last_name)
+    #     participant.first_name + " " + participant.last_name)
