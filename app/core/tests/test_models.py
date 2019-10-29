@@ -52,8 +52,15 @@ class ModelTests(TestCase):
             name='Class 1',
         )
 
-        self.assertEqual(str(grade),
-                         grade.name)
+        self.assertEqual(str(grade), grade.name)
+
+    def test_church_str(self):
+        """test string representation of church model"""
+        church = models.Church.objects.create(
+            name='Legon Interdenominational Church'
+        )
+
+        self.assertEqual(str(church), church.name)
 
     # def test_particpant_str(self):
     #     """test particpant string representation"""

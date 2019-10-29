@@ -41,3 +41,11 @@ class Grade(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Church(models.Model):
+    """model for home church of a participant"""
+    name = models.CharField(max_length=255, unique=True)
+
+    def __str__(self):
+        return self.name
