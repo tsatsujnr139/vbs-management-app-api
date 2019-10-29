@@ -11,7 +11,7 @@ GRADE_URL = reverse('participant:grade-list')
 
 
 class GradeTests(TestCase):
-    """test public grade api's"""
+    """test grade api's"""
 
     def setUp(self):
         self.client = APIClient()
