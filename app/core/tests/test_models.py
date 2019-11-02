@@ -62,6 +62,23 @@ class ModelTests(TestCase):
 
         self.assertEqual(str(church), church.name)
 
+    def test_pickup_person_str(self):
+        """test pickup person string representation"""
+        pickup_person = models.PickupPerson.objects.create(
+            name="Aforo Asomaning", contact_no="0244123456")
+        self.assertEqual(str(pickup_person), pickup_person.name)
+
+    def test_parent_str(self):
+        """Test string representation of parent model"""
+        parent = models.Parent.objects.create(
+            full_name="Aforo Asomaning",
+            primary_contact_no='0244123456',
+            alternate_contact_no='0559412168',
+            email='user@email.com'
+        )
+
+        self.assertEqual(str(parent), parent.full_name)
+
     # def test_particpant_str(self):
     #     """test particpant string representation"""
     #     participant = models.Participant.create(

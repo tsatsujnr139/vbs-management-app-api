@@ -36,16 +36,39 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 
 class Grade(models.Model):
-    """ model for educational grade/class of a participant"""
-    name = models.CharField(max_length=100, unique=True)
+    """Model definition for Grade."""
+    name = models.CharField(max_length=100, unique=True, blank=False)
 
     def __str__(self):
+        """Unicode representation of Grade."""
         return self.name
 
 
 class Church(models.Model):
-    """model for home church of a participant"""
-    name = models.CharField(max_length=255, unique=True)
+    """Model definition for Church."""
+    name = models.CharField(max_length=255, unique=True, blank=False)
 
     def __str__(self):
+        """Unicode representation of Church."""
         return self.name
+
+
+class PickupPerson(models.Model):
+    """Model definition for PickupPerson."""
+    name = models.CharField(max_length=255)
+    contact_no = models.CharField(max_length=12, blank=False)
+
+    def __str__(self):
+        """Unicode representation of PickupPerson."""
+        return self.name
+
+
+class Parent(models.Model):
+    """Model definition for Parent of participant"""
+    full_name = models.CharField(max_length=255, blank=False)
+    primary_contact_no = models.CharField(max_length=12, blank=False)
+    alternate_contact_no = models.CharField(max_length=12, blank=False)
+    email = models.EmailField(max_length=100)
+
+    def __str__(self):
+        return self.full_name

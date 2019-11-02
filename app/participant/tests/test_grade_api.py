@@ -10,7 +10,7 @@ from participant.serializers import GradeSerializer
 GRADE_URL = reverse('participant:grade-list')
 
 
-class GradeTests(TestCase):
+class GradeApiTests(TestCase):
     """test grade api's"""
 
     def setUp(self):
@@ -38,3 +38,9 @@ class GradeTests(TestCase):
         grade_exists = Grade.objects.filter(name=payload['name']).exists
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(grade_exists)
+
+    def test_add_grade_invalid_payload(self):
+        """test grade with invalid payload fails"""
+
+        res = self.client.post(GRADE_URL, {})
+        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
