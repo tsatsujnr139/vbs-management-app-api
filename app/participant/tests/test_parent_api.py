@@ -26,9 +26,10 @@ class ParentApiTests(TestCase):
             primary_contact_no='0244123456',
             alternate_contact_no='0544123456'
         )
+        parents = Participant.objects.all().order_by('id')
         res = self.client.get(PARENT_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        serializer = ParentSerializer(res.data, many=True)
+        serializer = ParentSerializer(parents, many=True)
         self.assertEqual(res.data, serializer.data)
 
     def test_add_parent_successfully(self):
