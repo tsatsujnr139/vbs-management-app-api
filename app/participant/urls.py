@@ -8,6 +8,7 @@ router = DefaultRouter()
 router.register('grades', views.GradeViewSet)
 router.register('churches', views.ChurchViewSet)
 router.register('pickuppersons', views.PickupPersonViewSet)
+router.register('parents', views.ParentViewSet)
 
 app_name = 'participant'
 

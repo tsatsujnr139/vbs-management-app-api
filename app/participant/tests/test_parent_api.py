@@ -19,13 +19,17 @@ class ParentApiTests(TestCase):
     def test_retrieve_parents(self):
         """Test retrieve parents api"""
         Parent.objects.create(full_name='Aforo Asomaning',
-                              primary_contact_no='0244123456', alternate_contact_no='0544123456')
+                              primary_contact_no='0244123456',
+                              alternate_contact_no='0544123456')
         Parent.objects.create(
-            full_name='Kafui Yeboa', primary_contact_no='0244123456', alternate_contact_no='0544123456')
+            full_name='Kafui Yeboah',
+            primary_contact_no='0244123456',
+            alternate_contact_no='0544123456'
+        )
         res = self.client.get(PARENT_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        serializer = ParentSerialzer(res.data, many=True)
-        res.assertEqual(res.data, serializer.data)
+        serializer = ParentSerializer(res.data, many=True)
+        self.assertEqual(res.data, serializer.data)
 
     def test_add_parent_successfully(self):
         """Test add parent successfully"""
@@ -34,9 +38,10 @@ class ParentApiTests(TestCase):
             'primary_contact_no': '0244123456',
             'alternate_contact_no': '0544123456'
         }
-        res = self.client.post(PARENT_URL, parent)
+        res = self.client.post(PARENT_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        parent_exists = Parents.objects.filter(payload['full_name']).exists
+        parent_exists = Parent.objects.filter(
+            full_name=payload['full_name']).exists
         self.assertTrue(parent_exists)
 
     def test_add_parent_invalid_payload(self):

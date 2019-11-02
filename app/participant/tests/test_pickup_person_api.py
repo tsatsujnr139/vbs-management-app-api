@@ -21,9 +21,9 @@ class PickupPersonApiTests(TestCase):
         """Test retrieval of pick up person successfully"""
 
         PickupPerson.objects.create(
-            name='Aforo Asomaning', contact_no='0244123456')
+            full_name='Aforo Asomaning', contact_no='0244123456')
         PickupPerson.objects.create(
-            name='Kafui Yeboah', contact_no='0544123456')
+            full_name='Kafui Yeboah', contact_no='0544123456')
 
         res = self.client.get(PICKUP_PERSON_URL)
         pickuppeople = PickupPerson.objects.all().order_by('id')
@@ -35,13 +35,13 @@ class PickupPersonApiTests(TestCase):
         """test add new pickup person successfully"""
 
         payload = {
-            'name': 'Aforo Asomaning',
+            'full_name': 'Aforo Asomaning',
             'contact_no': '0244123456'
         }
 
         res = self.client.post(PICKUP_PERSON_URL, payload)
         person_exists = PickupPerson.objects.filter(
-            name=payload['name']).exists
+            full_name=payload['full_name']).exists
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(person_exists)
 

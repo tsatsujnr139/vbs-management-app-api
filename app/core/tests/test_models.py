@@ -9,6 +9,35 @@ def sample_user(email='user@email.com', password='samplepassword'):
     return get_user_model().objects.create_user(email, password)
 
 
+def sample_parent(full_name='Aforo', primary_contact_no='0244123456',
+                  alternate_contact_no='0255123456'):
+    return models.Parent.objects.create(
+        full_name=full_name,
+        primary_contact_no=primary_contact_no,
+        alternate_contact_no=alternate_contact_no
+    )
+
+
+def sample_pickup_person(full_name='Aforo',
+                         contact_no='0244123456'):
+    return models.PickupPerson.objects.create(
+        full_name=full_name,
+        contact_no=contact_no
+    )
+
+
+def sample_church(name='Legon Interdenominational Church'):
+    return models.Church.objects.create(
+        name=name
+    )
+
+
+def sample_grade(name='Class1'):
+    return models.Grade.objects.create(
+        name=name
+    )
+
+
 class ModelTests(TestCase):
 
     def test_create_user_with_email_successfully(self):
@@ -65,8 +94,8 @@ class ModelTests(TestCase):
     def test_pickup_person_str(self):
         """test pickup person string representation"""
         pickup_person = models.PickupPerson.objects.create(
-            name="Aforo Asomaning", contact_no="0244123456")
-        self.assertEqual(str(pickup_person), pickup_person.name)
+            full_name="Aforo Asomaning", contact_no="0244123456")
+        self.assertEqual(str(pickup_person), pickup_person.full_name)
 
     def test_parent_str(self):
         """Test string representation of parent model"""
@@ -79,12 +108,20 @@ class ModelTests(TestCase):
 
         self.assertEqual(str(parent), parent.full_name)
 
-    # def test_particpant_str(self):
-    #     """test particpant string representation"""
-    #     participant = models.Participant.create(
-    #         first_name='Ama',
-    #         last_name='Sika'
-    #     )
+    def test_participant_str(self):
+        """test particpant string representation"""
+        participant = models.Participant.objects.create(
+            first_name='Adoma',
+            last_name='Asomaning',
+            grade=sample_grade(),
+            church=sample_church(),
+            parent=sample_parent(),
+            pickup_person=sample_pickup_person(),
+            gender='Male',
+            date_of_birth='2000-01-01',
+            medical_info='Allergic to Pineapple'
 
-    #     self.assertEqual(str(participant),
-    #     participant.first_name + " " + participant.last_name)
+        )
+
+        self.assertEqual(str(participant),
+                         participant.first_name + " " + participant.last_name)

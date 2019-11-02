@@ -1,6 +1,9 @@
 from django.db import models
+from django.utils.timezone import now
 from django.contrib.auth.models import (AbstractBaseUser, PermissionsMixin,
                                         BaseUserManager)
+
+from enum import Enum
 
 
 class UserManager(BaseUserManager):
@@ -55,12 +58,17 @@ class Church(models.Model):
 
 class PickupPerson(models.Model):
     """Model definition for PickupPerson."""
-    name = models.CharField(max_length=255)
+    full_name = models.CharField(max_length=255)
     contact_no = models.CharField(max_length=12, blank=False)
 
     def __str__(self):
         """Unicode representation of PickupPerson."""
-        return self.name
+        return self.full_name
+
+
+class GenderChoice(Enum):
+    MALE = 'Male'
+    FEMALE = 'Female'
 
 
 class Parent(models.Model):
@@ -68,7 +76,27 @@ class Parent(models.Model):
     full_name = models.CharField(max_length=255, blank=False)
     primary_contact_no = models.CharField(max_length=12, blank=False)
     alternate_contact_no = models.CharField(max_length=12, blank=False)
-    email = models.EmailField(max_length=100)
+    email = models.EmailField(max_length=100, blank=True)
 
     def __str__(self):
         return self.full_name
+
+
+class Participant(models.Model):
+    """Model definition for Participant model"""
+    first_name = models.CharField(max_length=50, blank=False)
+    last_name = models.CharField(max_length=50, blank=False)
+    gender = models.CharField(
+        max_length=6,
+        choices=[(tag, tag.value) for tag in GenderChoice]
+    )
+    medical_info = models.TextField(blank=True)
+    date_of_birth = models.DateField(default=now)
+    grade = models.ForeignKey('Grade', on_delete=models.PROTECT)
+    parent = models.ForeignKey('Parent', on_delete=models.PROTECT)
+    pickup_person = models.ForeignKey(
+        'PickupPerson', on_delete=models.PROTECT)
+    church = models.ForeignKey('Church', on_delete=models.PROTECT)
+
+    def __str__(self):
+        return self.first_name + " " + self.last_name

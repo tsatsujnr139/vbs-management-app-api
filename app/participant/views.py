@@ -1,9 +1,9 @@
 from rest_framework import viewsets, mixins
 
 from participant.serializers import (GradeSerializer, ChurchSerializer,
-                                     PickupPersonSerializer)
+                                     PickupPersonSerializer, ParentSerializer)
 
-from core.models import Grade, Church, PickupPerson
+from core.models import Grade, Church, PickupPerson, Parent
 
 
 class GradeViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
@@ -25,3 +25,10 @@ class PickupPersonViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
     """View for managing pickup persons for participants"""
     serializer_class = PickupPersonSerializer
     queryset = PickupPerson.objects.all()
+
+
+class ParentViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
+                    mixins.ListModelMixin):
+    """View for managing parents of participants"""
+    serializer_class = ParentSerializer
+    queryset = Parent.objects.all()
