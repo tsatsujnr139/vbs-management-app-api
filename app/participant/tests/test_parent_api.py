@@ -1,5 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
+
 
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -17,7 +19,13 @@ class ParentApiTests(TestCase):
         self.client = APIClient()
 
     def test_retrieve_parents(self):
-        """Test retrieve parents api"""
+        """Test retrieve parents api for authenticated user"""
+        self.user = get_user_model().objects.create_user(
+            'user@company.com',
+            'testpass'
+        )
+        self.client.force_authenticate(self.user)
+
         Parent.objects.create(full_name='Aforo Asomaning',
                               primary_contact_no='0244123456',
                               alternate_contact_no='0544123456')
@@ -31,6 +39,11 @@ class ParentApiTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         serializer = ParentSerializer(parents, many=True)
         self.assertEqual(res.data, serializer.data)
+
+    def test_retrieve_parents_unauthorized_user(self):
+        """test retrieve parent list for unauthorized user"""
+        res = self.client.get(PARENT_URL)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_add_parent_successfully(self):
         """Test add parent successfully"""

@@ -79,8 +79,13 @@ class ParticipantsApiTests(TestCase):
 
     def setUp(self):
         self.client = APIClient()
+        self.user = get_user_model().objects.create_user(
+            'user@company.com',
+            'testpass'
+        )
+        self.client.force_authenticate(self.user)
 
-    def test_retrieve_participants(self):
+    def test_retrieve_participants_for_authenticated_user(self):
         """Test retrieving participant list successfully"""
 
         Participant.objects.create(

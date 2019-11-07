@@ -1,4 +1,5 @@
 from rest_framework import viewsets, mixins
+from participant import permissions
 
 from participant.serializers import (GradeSerializer, ChurchSerializer,
                                      PickupPersonSerializer, ParentSerializer)
@@ -27,8 +28,9 @@ class PickupPersonViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
     queryset = PickupPerson.objects.all()
 
 
-class ParentViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
-                    mixins.ListModelMixin):
+class ParentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
+                    mixins.CreateModelMixin):
     """View for managing parents of participants"""
     serializer_class = ParentSerializer
     queryset = Parent.objects.all()
+    permission_classes = (permissions.ListAdminOnly,)
