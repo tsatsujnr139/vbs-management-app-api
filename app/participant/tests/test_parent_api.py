@@ -34,7 +34,7 @@ class ParentApiTests(TestCase):
             primary_contact_no='0244123456',
             alternate_contact_no='0544123456'
         )
-        parents = Participant.objects.all().order_by('id')
+        parents = Parent.objects.all().order_by('id')
         res = self.client.get(PARENT_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         serializer = ParentSerializer(parents, many=True)
@@ -43,7 +43,7 @@ class ParentApiTests(TestCase):
     def test_retrieve_parents_unauthorized_user(self):
         """test retrieve parent list for unauthorized user"""
         res = self.client.get(PARENT_URL)
-        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_add_parent_successfully(self):
         """Test add parent successfully"""

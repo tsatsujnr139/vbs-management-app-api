@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 from rest_framework import status
 from rest_framework.test import APIClient
@@ -20,6 +21,12 @@ class PickupPersonApiTests(TestCase):
     def test_retreive_pickup_persons_successfully(self):
         """Test retrieval of pick up person successfully"""
 
+        self.user = get_user_model().objects.create_user(
+            'user@company.com',
+            'testpass'
+        )
+        self.client.force_authenticate(self.user)
+
         PickupPerson.objects.create(
             full_name='Aforo Asomaning', contact_no='0244123456')
         PickupPerson.objects.create(
@@ -30,6 +37,11 @@ class PickupPersonApiTests(TestCase):
         serializer = PickupPersonSerializer(pickuppeople, many=True)
 
         self.assertEqual(res.data, serializer.data)
+
+    def test_retrieve_pickup_person_unauthorized_user(self):
+        """test retrieve pickup personj list for unauthorized user"""
+        res = self.client.get(PICKUP_PERSON_URL)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
     def test_add_new_pickup_person(self):
         """test add new pickup person successfully"""

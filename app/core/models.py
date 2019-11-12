@@ -86,10 +86,7 @@ class Participant(models.Model):
     """Model definition for Participant model"""
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
-    gender = models.CharField(
-        max_length=6,
-        choices=[(tag, tag.value) for tag in GenderChoice]
-    )
+    gender = models.CharField(max_length=6)
     medical_info = models.TextField(blank=True)
     date_of_birth = models.DateField(default=now)
     grade = models.ForeignKey('Grade', on_delete=models.PROTECT)

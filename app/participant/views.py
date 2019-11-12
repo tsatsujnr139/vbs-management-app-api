@@ -1,10 +1,14 @@
 from rest_framework import viewsets, mixins
+from rest_framework.authentication import TokenAuthentication
 from participant import permissions
 
-from participant.serializers import (GradeSerializer, ChurchSerializer,
-                                     PickupPersonSerializer, ParentSerializer)
+from participant.serializers import (GradeSerializer,
+                                     ChurchSerializer,
+                                     PickupPersonSerializer, ParentSerializer,
+                                     ParticipantSerializer
+                                     )
 
-from core.models import Grade, Church, PickupPerson, Parent
+from core.models import Grade, Church, PickupPerson, Parent, Participant
 
 
 class GradeViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
@@ -26,6 +30,8 @@ class PickupPersonViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
     """View for managing pickup persons for participants"""
     serializer_class = PickupPersonSerializer
     queryset = PickupPerson.objects.all()
+    permission_classes = (permissions.ListAdminOnly,)
+    authentication_classes = (TokenAuthentication,)
 
 
 class ParentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
@@ -34,3 +40,12 @@ class ParentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
     serializer_class = ParentSerializer
     queryset = Parent.objects.all()
     permission_classes = (permissions.ListAdminOnly,)
+    authentication_classes = (TokenAuthentication,)
+
+
+class ParticipantViewset(viewsets.GenericViewSet, mixins.ListModelMixin,
+                         mixins.CreateModelMixin):
+    serializer_class = ParticipantSerializer
+    queryset = Participant.objects.all()
+    permission_classes = (permissions.ListAdminOnly,)
+    authentication_classes = (TokenAuthentication,)
