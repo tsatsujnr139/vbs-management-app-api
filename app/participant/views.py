@@ -44,8 +44,9 @@ class ParentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
 
 
 class ParticipantViewset(viewsets.GenericViewSet, mixins.ListModelMixin,
-                         mixins.CreateModelMixin):
+                         mixins.CreateModelMixin, mixins.RetrieveModelMixin):
     serializer_class = ParticipantSerializer
     queryset = Participant.objects.all()
     permission_classes = (permissions.ListAdminOnly,)
     authentication_classes = (TokenAuthentication,)
+    lookup_field = ('id')

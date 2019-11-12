@@ -61,3 +61,11 @@ class ParticipantSerializer(serializers.ModelSerializer):
         model = Participant
         fields = ('__all__')
         read_only_fields = ('id',)
+
+
+class ParticipantDetailSerializer(ParticipantSerializer):
+    """Serializer for Participant Detail"""
+    parent = ParentSerializer(read_only=True)
+    church = ChurchSerializer(read_only=True)
+    pickup_person = PickupPersonSerializer(read_only=True)
+    grade = GradeSerializer(read_only=True)

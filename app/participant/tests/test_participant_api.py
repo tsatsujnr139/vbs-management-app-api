@@ -8,7 +8,8 @@ from rest_framework.test import APIClient
 from core.models import (Participant, Grade,
                          Church, PickupPerson,
                          Parent)
-from participant.serializers import ParticipantSerializer
+from participant.serializers import (ParticipantSerializer,
+                                     ParticipantDetailSerializer)
 
 
 PARTICIPANT_URL = reverse('participant:participant-list')
@@ -52,7 +53,7 @@ def sample_grade(name='Class1'):
 def sample_participant(grade, church, pickup_person, parent, **params):
 
     defaults = {
-        'first_name': 'Adoma ',
+        'first_name': 'Adoma',
         'last_name': 'Asomaning',
         'date_of_birth': '2004-01-01',
         'gender': 'Female',
@@ -70,7 +71,9 @@ def sample_participant(grade, church, pickup_person, parent, **params):
 
 def get_detail_url(participant_id):
     """return participant detail URL"""
-    return reverse('participant:participant-detail', args=[participant_id])
+    return reverse('participant:participant-detail',
+                   kwargs={'id': participant_id}
+                   )
 
 
 class ParticipantsApiTests(TestCase):
@@ -141,12 +144,45 @@ class ParticipantsApiTests(TestCase):
             first_name='Aba', last_name='Asomaning').exists
         self.assertTrue(participant_created)
 
-    # def test_view_participant_details(self):
-    #     """Test viewing a specific participant detail"""
-    #     participant = sample_participant()
+    def test_view_participant_details_for_authenticated_user(self):
+        """Test viewing a specific participant detail for authenticated user"""
+        self.user = get_user_model().objects.create_user(
+            'user@company.com',
+            'testpass'
+        )
+        self.client.force_authenticate(self.user)
 
-    #     url = get_detail_url(participant.id)
-    #     res = self.client.get(url)
+        grade = sample_grade()
+        parent = sample_parent()
+        church = sample_church()
+        pickup_person = sample_pickup_person()
 
-    #     serializer = ParticipantDetailSerializer(res.data)
-    #     self.assertEqual(res.data, serializer.data)
+        participant = sample_participant(
+            grade=grade, parent=parent,
+            church=church, pickup_person=pickup_person
+        )
+
+        url = get_detail_url(participant.id)
+        res = self.client.get(url)
+        serializer = ParticipantDetailSerializer(participant)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['first_name'], participant.first_name)
+
+    def test_view_participant_details_for_unauthorized_user(self):
+        """
+        Test viewing a specific participant detail for unauthorized user fails
+
+        """
+        grade = sample_grade()
+        parent = sample_parent()
+        church = sample_church()
+        pickup_person = sample_pickup_person()
+
+        participant = sample_participant(
+            grade=grade, parent=parent,
+            church=church, pickup_person=pickup_person
+        )
+
+        url = get_detail_url(participant.id)
+        res = self.client.get(url)
+        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
