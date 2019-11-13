@@ -125,3 +125,21 @@ class ModelTests(TestCase):
 
         self.assertEqual(str(participant),
                          participant.first_name + " " + participant.last_name)
+
+    def test_volunteer_str(self):
+        """Test volunteer String representation"""
+        volunteer = models.Volunteer.objects.create(
+            first_name='Tsatsu',
+            last_name='Adogla-Bessa',
+            role='Teaching',
+            contact_no='0500018351',
+            email='tsatsujnr@gmail.com',
+            gender='Male',
+            preferred_class='Pre-School',
+            church=sample_church(),
+            previous_volunteer=True,
+            previous_site='Pre-School'
+        )
+
+        self.assertEqual(
+            str(volunteer), f'{volunteer.first_name} {volunteer.last_name}')
