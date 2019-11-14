@@ -1,6 +1,8 @@
 from rest_framework import viewsets, mixins
+from rest_framework.decorators import action
 from rest_framework.authentication import TokenAuthentication
 from participant import permissions
+
 
 from participant.serializers import (GradeSerializer,
                                      ChurchSerializer,
@@ -10,6 +12,7 @@ from participant.serializers import (GradeSerializer,
 
 from core.models import (Grade, Church, PickupPerson,
                          Parent, Participant, Volunteer)
+from core.mixins import CountModelMixin
 
 
 class GradeViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
@@ -20,7 +23,7 @@ class GradeViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
 
 
 class ChurchViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
-                    mixins.CreateModelMixin):
+                    mixins.CreateModelMixin, CountModelMixin):
     """view for managing churches in the application"""
     serializer_class = ChurchSerializer
     queryset = Church.objects.all()
@@ -45,16 +48,25 @@ class ParentViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
 
 
 class ParticipantViewset(viewsets.GenericViewSet, mixins.ListModelMixin,
-                         mixins.CreateModelMixin, mixins.RetrieveModelMixin):
+                         mixins.CreateModelMixin, mixins.RetrieveModelMixin,
+                         CountModelMixin):
     serializer_class = ParticipantSerializer
-    queryset = Participant.objects.all()
     permission_classes = (permissions.ListAdminOnly,)
     authentication_classes = (TokenAuthentication,)
     lookup_field = ('id')
 
+    def get_queryset(self):
+        """retrieve participants list for authenticated user"""
+        queryset = Participant.objects.all()
+        grade = self.request.query_params.get('grade', None)
+        if grade is not None:
+            queryset = queryset.filter(grade=grade)
+        return queryset
+
 
 class VolunteerViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
-                       mixins.ListModelMixin, mixins.RetrieveModelMixin):
+                       mixins.ListModelMixin, mixins.RetrieveModelMixin,
+                       CountModelMixin):
     serializer_class = VolunteerSerializer
     queryset = Volunteer.objects.all()
     permission_classes = (permissions.ListAdminOnly,)

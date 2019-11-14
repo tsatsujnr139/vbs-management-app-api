@@ -10,6 +10,7 @@ from participant.serializers import ChurchSerializer
 
 
 CHURCHES_URL = reverse('participant:church-list')
+CHURCHES_COUNT_URL = reverse('participant:church-count')
 
 
 class ChurchApiTests(TestCase):
@@ -51,3 +52,16 @@ class ChurchApiTests(TestCase):
 
         res = self.client.post(CHURCHES_URL, {})
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_retrieve_church_count(self):
+        """Test retrieve volunteer count api"""
+        Church.objects.create(
+            name='Legon Interdenominational Church'
+        )
+        Church.objects.create(
+            name='Christ Anglican Church'
+        )
+
+        res = self.client.get(CHURCHES_COUNT_URL)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['count'], 2)

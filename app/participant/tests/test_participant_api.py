@@ -12,6 +12,7 @@ from participant.serializers import ParticipantSerializer
 
 
 PARTICIPANT_URL = reverse('participant:participant-list')
+PARTICIPANT_COUNT_URL = reverse('participant:participant-count')
 
 
 def sample_parent(**params):
@@ -43,7 +44,7 @@ def sample_church(name='Legon Interdenominational Church'):
     )
 
 
-def sample_grade(name='Class1'):
+def sample_grade(name='Class 1'):
     return Grade.objects.create(
         name=name
     )
@@ -184,3 +185,84 @@ class ParticipantsApiTests(TestCase):
         url = get_detail_url(participant.id)
         res = self.client.get(url)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_retrieve_participant_count(self):
+        """Test retrieval of number of registered participant"""
+        sample_participant(
+            grade=sample_grade(),
+            parent=sample_parent(),
+            church=sample_church(),
+            pickup_person=sample_pickup_person()
+        )
+
+        sample_participant(
+            grade=sample_grade(name='Class 2'),
+            parent=sample_parent(full_name='Kofi Asomaning'),
+            church=sample_church(name='Anglican Church'),
+            pickup_person=sample_pickup_person(full_name='Sam Yeboah')
+        )
+
+        res = self.client.get(PARTICIPANT_COUNT_URL)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['count'], 2)
+
+    def test_retrieve_participant_list_by_class(self):
+        """Test retrieving participant list by class api"""
+
+        self.user = get_user_model().objects.create_user(
+            'user@email.com',
+            'testpass'
+        )
+
+        self.client.force_authenticate(self.user)
+
+        grade = sample_grade()
+        grade2 = sample_grade(name='Class 6')
+        parent = sample_parent()
+        church = sample_church()
+        pickup_person = sample_pickup_person()
+
+        payload1 = {
+            'first_name': 'Ewurabena',
+            'last_name': 'Surname',
+            'gender': 'Female',
+            'date_of_birth': '2000-01-01',
+            'medical_information': '',
+            'grade': grade.id,
+            'church': church.id,
+            'parent': parent.id,
+            'pickup_person': pickup_person.id
+        }
+
+        payload2 = {
+            'first_name': 'Aba',
+            'last_name': 'Asomaning',
+            'gender': 'Female',
+            'date_of_birth': '2000-01-01',
+            'medical_information': '',
+            'grade': grade2.id,
+            'church': church.id,
+            'parent': parent.id,
+            'pickup_person': pickup_person.id
+        }
+
+        payload3 = {
+            'first_name': 'Owusua',
+            'last_name': 'Yeboah',
+            'gender': 'Female',
+            'date_of_birth': '2000-01-01',
+            'medical_information': '',
+            'grade': grade.id,
+            'church': church.id,
+            'parent': parent.id,
+            'pickup_person': pickup_person.id
+        }
+
+        self.client.post(PARTICIPANT_URL, payload1)
+        self.client.post(PARTICIPANT_URL, payload2)
+        self.client.post(PARTICIPANT_URL, payload3)
+
+        res = self.client.get(PARTICIPANT_URL, {'grade': grade.id})
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), 2)
+        self.assertEqual(res.data[0]['first_name'], payload3['first_name'])

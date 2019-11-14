@@ -11,6 +11,7 @@ from participant.serializers import VolunteerSerializer
 
 
 VOLUNTEER_URL = reverse('participant:volunteer-list')
+VOLUNTEER_COUNT_URL = reverse('participant:volunteer-count')
 
 
 def sample_church(name='Legon Interdenominational Church'):
@@ -190,3 +191,35 @@ class VolunteerTests(TestCase):
         url = get_detail_url(volunteer.id)
         res = self.client.get(url)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_retrieve_volunteer_count(self):
+        """Test retrieve volunteer count api"""
+        Volunteer.objects.create(
+            first_name='Tsatsu',
+            last_name='Adogla-Bessa',
+            role='Teaching',
+            contact_no='0500018351',
+            email='tsatsujnr@gmail.com',
+            gender='Male',
+            preferred_class='Pre-School',
+            church=sample_church(),
+            previous_volunteer=True,
+            previous_site='Pre-School'
+        )
+
+        Volunteer.objects.create(
+            first_name='Hetty',
+            last_name='Yirenkyi-Boafo',
+            role='Teaching',
+            contact_no='0243578943',
+            email='hetty@gmail.com',
+            gender='Female',
+            preferred_class='Class 1',
+            church=sample_church(name='Anglican Church'),
+            previous_volunteer=True,
+            previous_site='Pre-School'
+        )
+
+        res = self.client.get(VOLUNTEER_COUNT_URL)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['count'], 2)

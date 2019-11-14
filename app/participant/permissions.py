@@ -8,6 +8,8 @@ class ListAdminOnly(permissions.BasePermission):
         if not request.user.is_authenticated:
             if view.action == 'create':
                 return True
+            elif view.action == 'count':
+                return True
             else:
                 return False
         else:
