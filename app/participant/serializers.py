@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from core.models import (Grade, Church, PickupPerson,
-                         Parent, Participant)
+                         Parent, Participant, Volunteer)
 
 
 class GradeSerializer(serializers.ModelSerializer):
@@ -69,3 +69,15 @@ class ParticipantDetailSerializer(ParticipantSerializer):
     church = ChurchSerializer(read_only=True)
     pickup_person = PickupPersonSerializer(read_only=True)
     grade = GradeSerializer(read_only=True)
+
+
+class VolunteerSerializer(serializers.ModelSerializer):
+    """Serializer for Volunteer model"""
+    church = serializers.PrimaryKeyRelatedField(
+        queryset=Church.objects.all()
+    )
+
+    class Meta:
+        model = Volunteer
+        fields = ('__all__')
+        read_only_fields = ('id',)

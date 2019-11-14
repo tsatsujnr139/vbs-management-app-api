@@ -5,10 +5,11 @@ from participant import permissions
 from participant.serializers import (GradeSerializer,
                                      ChurchSerializer,
                                      PickupPersonSerializer, ParentSerializer,
-                                     ParticipantSerializer
+                                     ParticipantSerializer, VolunteerSerializer
                                      )
 
-from core.models import Grade, Church, PickupPerson, Parent, Participant
+from core.models import (Grade, Church, PickupPerson,
+                         Parent, Participant, Volunteer)
 
 
 class GradeViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
@@ -47,6 +48,15 @@ class ParticipantViewset(viewsets.GenericViewSet, mixins.ListModelMixin,
                          mixins.CreateModelMixin, mixins.RetrieveModelMixin):
     serializer_class = ParticipantSerializer
     queryset = Participant.objects.all()
+    permission_classes = (permissions.ListAdminOnly,)
+    authentication_classes = (TokenAuthentication,)
+    lookup_field = ('id')
+
+
+class VolunteerViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
+                       mixins.ListModelMixin, mixins.RetrieveModelMixin):
+    serializer_class = VolunteerSerializer
+    queryset = Volunteer.objects.all()
     permission_classes = (permissions.ListAdminOnly,)
     authentication_classes = (TokenAuthentication,)
     lookup_field = ('id')

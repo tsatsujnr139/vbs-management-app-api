@@ -8,8 +8,7 @@ from rest_framework.test import APIClient
 from core.models import (Participant, Grade,
                          Church, PickupPerson,
                          Parent)
-from participant.serializers import (ParticipantSerializer,
-                                     ParticipantDetailSerializer)
+from participant.serializers import ParticipantSerializer
 
 
 PARTICIPANT_URL = reverse('participant:participant-list')
@@ -164,7 +163,6 @@ class ParticipantsApiTests(TestCase):
 
         url = get_detail_url(participant.id)
         res = self.client.get(url)
-        serializer = ParticipantDetailSerializer(participant)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['first_name'], participant.first_name)
 

@@ -10,6 +10,7 @@ router.register('churches', views.ChurchViewSet)
 router.register('pickup-persons', views.PickupPersonViewSet)
 router.register('parents', views.ParentViewSet)
 router.register('participants', views.ParticipantViewset)
+router.register('volunteers', views.VolunteerViewSet)
 
 app_name = 'participant'
 
