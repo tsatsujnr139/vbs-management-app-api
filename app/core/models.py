@@ -29,9 +29,12 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     """User model with email as primary identifier"""
     email = models.EmailField(max_length=255, unique=True)
-    name = models.CharField(max_length=255)
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    created = models.DateTimeField(default=now, editable=False)
+    modified = models.DateTimeField(auto_now_add=True)
 
     objects = UserManager()
 
@@ -56,30 +59,9 @@ class Church(models.Model):
         return self.name
 
 
-class PickupPerson(models.Model):
-    """Model definition for PickupPerson."""
-    full_name = models.CharField(max_length=255)
-    contact_no = models.CharField(max_length=12, blank=False)
-
-    def __str__(self):
-        """Unicode representation of PickupPerson."""
-        return self.full_name
-
-
 class GenderChoice(Enum):
     MALE = 'Male'
     FEMALE = 'Female'
-
-
-class Parent(models.Model):
-    """Model definition for Parent of participant"""
-    full_name = models.CharField(max_length=255, blank=False)
-    primary_contact_no = models.CharField(max_length=12, blank=False)
-    alternate_contact_no = models.CharField(max_length=12, blank=False)
-    email = models.EmailField(max_length=100, blank=True)
-
-    def __str__(self):
-        return self.full_name
 
 
 class Participant(models.Model):
@@ -89,11 +71,16 @@ class Participant(models.Model):
     gender = models.CharField(max_length=6)
     medical_info = models.TextField(blank=True)
     date_of_birth = models.DateField(default=now)
-    grade = models.ForeignKey('Grade', on_delete=models.PROTECT)
-    parent = models.ForeignKey('Parent', on_delete=models.PROTECT)
-    pickup_person = models.ForeignKey(
-        'PickupPerson', on_delete=models.PROTECT)
-    church = models.ForeignKey('Church', on_delete=models.PROTECT)
+    grade = models.CharField(max_length=10, blank=False)
+    parent_name = models.CharField(max_length=100, blank=False)
+    primary_contact_no = models.CharField(max_length=12, blank=False)
+    alternate_contact_no = models.CharField(max_length=12, blank=False)
+    email = models.EmailField(max_length=100, blank=True)
+    church = models.CharField(max_length=150, blank=False)
+    pickup_person_name = models.CharField(max_length=100)
+    pickup_person_contact_no = models.CharField(max_length=12, blank=False)
+    created = models.DateTimeField(default=now, editable=False)
+    modified = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -105,12 +92,15 @@ class Volunteer(models.Model):
     last_name = models.CharField(max_length=100)
     gender = models.CharField(max_length=6)
     role = models.CharField(max_length=12)
-    church = models.ForeignKey('Church', on_delete=models.PROTECT)
-    preferred_class = models.CharField(max_length=50)
-    contact_no = models.CharField(max_length=12)
+    church = models.CharField(max_length=150, blank=False)
+    preferred_class = models.CharField(max_length=10, blank=False)
+    contact_no = models.CharField(max_length=12, blank=False)
+    whatsApp_no = models.CharField(max_length=12, blank=True)
     email = models.EmailField(max_length=100, blank=True)
     previous_volunteer = models.BooleanField(default=False)
     previous_site = models.CharField(max_length=100, blank=True)
+    created = models.DateTimeField(default=now, editable=False)
+    modified = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.first_name + " " + self.last_name

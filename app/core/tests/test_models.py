@@ -9,23 +9,6 @@ def sample_user(email='user@email.com', password='samplepassword'):
     return get_user_model().objects.create_user(email, password)
 
 
-def sample_parent(full_name='Aforo', primary_contact_no='0244123456',
-                  alternate_contact_no='0255123456'):
-    return models.Parent.objects.create(
-        full_name=full_name,
-        primary_contact_no=primary_contact_no,
-        alternate_contact_no=alternate_contact_no
-    )
-
-
-def sample_pickup_person(full_name='Aforo',
-                         contact_no='0244123456'):
-    return models.PickupPerson.objects.create(
-        full_name=full_name,
-        contact_no=contact_no
-    )
-
-
 def sample_church(name='Legon Interdenominational Church'):
     return models.Church.objects.create(
         name=name
@@ -91,36 +74,23 @@ class ModelTests(TestCase):
 
         self.assertEqual(str(church), church.name)
 
-    def test_pickup_person_str(self):
-        """test pickup person string representation"""
-        pickup_person = models.PickupPerson.objects.create(
-            full_name="Aforo Asomaning", contact_no="0244123456")
-        self.assertEqual(str(pickup_person), pickup_person.full_name)
-
-    def test_parent_str(self):
-        """Test string representation of parent model"""
-        parent = models.Parent.objects.create(
-            full_name="Aforo Asomaning",
-            primary_contact_no='0244123456',
-            alternate_contact_no='0559412168',
-            email='user@email.com'
-        )
-
-        self.assertEqual(str(parent), parent.full_name)
-
     def test_participant_str(self):
         """test particpant string representation"""
         participant = models.Participant.objects.create(
             first_name='Adoma',
             last_name='Asomaning',
-            grade=sample_grade(),
-            church=sample_church(),
-            parent=sample_parent(),
-            pickup_person=sample_pickup_person(),
-            gender='Male',
+            grade='Class 3',
+            church='Legon interdenominational Church',
+            parent_name="Aforo Asomaning",
+            primary_contact_no='0244123456',
+            whatsApp_no='0244123456',
+            alternate_contact_no='0244123456',
+            email='aforo@gmail.com',
+            pickup_person_name='Aforo Asomaning',
+            pickup_person_contact_no='0244123456',
+            gender='Female',
             date_of_birth='2000-01-01',
             medical_info='Allergic to Pineapple'
-
         )
 
         self.assertEqual(str(participant),
@@ -136,7 +106,7 @@ class ModelTests(TestCase):
             email='tsatsujnr@gmail.com',
             gender='Male',
             preferred_class='Pre-School',
-            church=sample_church(),
+            church='Legon Interdenominational Church',
             previous_volunteer=True,
             previous_site='Pre-School'
         )

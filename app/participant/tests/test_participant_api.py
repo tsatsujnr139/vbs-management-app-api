@@ -6,36 +6,12 @@ from rest_framework import status
 from rest_framework.test import APIClient
 
 from core.models import (Participant, Grade,
-                         Church, PickupPerson,
-                         Parent)
+                         Church)
 from participant.serializers import ParticipantSerializer
 
 
 PARTICIPANT_URL = reverse('participant:participant-list')
 PARTICIPANT_COUNT_URL = reverse('participant:participant-count')
-
-
-def sample_parent(**params):
-
-    defaults = {
-        'full_name': 'Aforo Asomaning',
-        'primary_contact_no': '0244123456',
-        'alternate_contact_no': '0255123456'
-    }
-
-    defaults.update(params)
-
-    return Parent.objects.create(
-        **defaults
-    )
-
-
-def sample_pickup_person(full_name='Aforo',
-                         contact_no='0244123456'):
-    return PickupPerson.objects.create(
-        full_name=full_name,
-        contact_no=contact_no
-    )
 
 
 def sample_church(name='Legon Interdenominational Church'):
@@ -50,23 +26,27 @@ def sample_grade(name='Class 1'):
     )
 
 
-def sample_participant(grade, church, pickup_person, parent, **params):
+def sample_participant(**params):
 
     defaults = {
         'first_name': 'Adoma',
         'last_name': 'Asomaning',
         'date_of_birth': '2004-01-01',
         'gender': 'Female',
+        'church': 'Legon interdenominational Church',
+        'parent_name': "Aforo Asomaning",
+        'primary_contact_no': '0244123456',
+        'whatsApp_no': '0244123456',
+        'alternate_contact_no': '0244123456',
+        'email': 'aforo@gmail.com',
+        'pickup_person_name': 'Aforo Asomaning',
+        'pickup_person_contact_no': '0244123456',
         'medical_info': 'Allergic to pineapple'
     }
 
     defaults.update(params)
 
-    return Participant.objects.create(grade=grade,
-                                      church=church,
-                                      pickup_person=pickup_person,
-                                      parent=parent,
-                                      **defaults)
+    return Participant.objects.create(**defaults)
 
 
 def get_detail_url(participant_id):
@@ -91,17 +71,12 @@ class ParticipantsApiTests(TestCase):
         self.client.force_authenticate(self.user)
 
         Participant.objects.create(
-            grade=sample_grade(name='Class 2'),
-            church=sample_church(name='Ridge Church'),
-            parent=sample_parent(full_name='Kofi Asomaning'),
-            pickup_person=sample_pickup_person()
+            first_name='Adoma',
+            last_name='Asomaning',
+            date_of_birth='2003-01-01'
         )
 
         Participant.objects.create(
-            grade=sample_grade(),
-            church=sample_church(),
-            parent=sample_parent(),
-            pickup_person=sample_pickup_person(),
             first_name='Aba',
             last_name='Asomaning',
             date_of_birth='2000-01-01'
@@ -120,10 +95,6 @@ class ParticipantsApiTests(TestCase):
 
     def test_add_participant(self):
         """Test add new participant succesfully"""
-        grade = sample_grade()
-        parent = sample_parent()
-        church = sample_church()
-        pickup_person = sample_pickup_person()
 
         payload = {
             'first_name': 'Aba ',
@@ -131,10 +102,15 @@ class ParticipantsApiTests(TestCase):
             'gender': 'Female',
             'date_of_birth': '2000-01-01',
             'medical_information': '',
-            'grade': grade.id,
-            'church': church.id,
-            'parent': parent.id,
-            'pickup_person': pickup_person.id
+            'grade': 'Class 1',
+            'church': 'Legon Interdenominational Church',
+            'parent_name': "Aforo Asomaning",
+            'primary_contact_no': '0244123456',
+            'whatsApp_no': '0244123456',
+            'alternate_contact_no': '0244123456',
+            'email': 'aforo@gmail.com',
+            'pickup_person_name': 'Aforo Asomaning',
+            'pickup_person_contact_no': '0244123456'
         }
 
         res = self.client.post(PARTICIPANT_URL, payload)
@@ -152,15 +128,7 @@ class ParticipantsApiTests(TestCase):
         )
         self.client.force_authenticate(self.user)
 
-        grade = sample_grade()
-        parent = sample_parent()
-        church = sample_church()
-        pickup_person = sample_pickup_person()
-
-        participant = sample_participant(
-            grade=grade, parent=parent,
-            church=church, pickup_person=pickup_person
-        )
+        participant = sample_participant()
 
         url = get_detail_url(participant.id)
         res = self.client.get(url)
@@ -172,15 +140,8 @@ class ParticipantsApiTests(TestCase):
         Test viewing a specific participant detail for unauthorized user fails
 
         """
-        grade = sample_grade()
-        parent = sample_parent()
-        church = sample_church()
-        pickup_person = sample_pickup_person()
 
-        participant = sample_participant(
-            grade=grade, parent=parent,
-            church=church, pickup_person=pickup_person
-        )
+        participant = sample_participant()
 
         url = get_detail_url(participant.id)
         res = self.client.get(url)
@@ -188,19 +149,9 @@ class ParticipantsApiTests(TestCase):
 
     def test_retrieve_participant_count(self):
         """Test retrieval of number of registered participant"""
-        sample_participant(
-            grade=sample_grade(),
-            parent=sample_parent(),
-            church=sample_church(),
-            pickup_person=sample_pickup_person()
-        )
+        sample_participant()
 
-        sample_participant(
-            grade=sample_grade(name='Class 2'),
-            parent=sample_parent(full_name='Kofi Asomaning'),
-            church=sample_church(name='Anglican Church'),
-            pickup_person=sample_pickup_person(full_name='Sam Yeboah')
-        )
+        sample_participant()
 
         res = self.client.get(PARTICIPANT_COUNT_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
@@ -216,22 +167,21 @@ class ParticipantsApiTests(TestCase):
 
         self.client.force_authenticate(self.user)
 
-        grade = sample_grade()
-        grade2 = sample_grade(name='Class 6')
-        parent = sample_parent()
-        church = sample_church()
-        pickup_person = sample_pickup_person()
-
         payload1 = {
             'first_name': 'Ewurabena',
             'last_name': 'Surname',
             'gender': 'Female',
             'date_of_birth': '2000-01-01',
             'medical_information': '',
-            'grade': grade.id,
-            'church': church.id,
-            'parent': parent.id,
-            'pickup_person': pickup_person.id
+            'grade': 'Class 1',
+            'church': 'Legon Interdenominational Church',
+            'parent_name': "Aforo Asomaning",
+            'primary_contact_no': '0244123456',
+            'whatsApp_no': '0244123456',
+            'alternate_contact_no': '0244123456',
+            'email': 'aforo@gmail.com',
+            'pickup_person_name': 'Aforo Asomaning',
+            'pickup_person_contact_no': '0244123456'
         }
 
         payload2 = {
@@ -240,10 +190,15 @@ class ParticipantsApiTests(TestCase):
             'gender': 'Female',
             'date_of_birth': '2000-01-01',
             'medical_information': '',
-            'grade': grade2.id,
-            'church': church.id,
-            'parent': parent.id,
-            'pickup_person': pickup_person.id
+            'grade': 'JHS 1',
+            'church': 'Legon Interdenominational Church',
+            'parent_name': "Aforo Asomaning",
+            'primary_contact_no': '0244123456',
+            'whatsApp_no': '0244123456',
+            'alternate_contact_no': '0244123456',
+            'email': 'aforo@gmail.com',
+            'pickup_person_name': 'Aforo Asomaning',
+            'pickup_person_contact_no': '0244123456'
         }
 
         payload3 = {
@@ -252,17 +207,22 @@ class ParticipantsApiTests(TestCase):
             'gender': 'Female',
             'date_of_birth': '2000-01-01',
             'medical_information': '',
-            'grade': grade.id,
-            'church': church.id,
-            'parent': parent.id,
-            'pickup_person': pickup_person.id
+            'grade': 'Class 1',
+            'church': 'Legon Interdenominational Church',
+            'parent_name': "Kafui Yeboah",
+            'primary_contact_no': '0244123456',
+            'whatsApp_no': '0244123456',
+            'alternate_contact_no': '0244123456',
+            'email': 'aforo@gmail.com',
+            'pickup_person_name': 'Kafui Yeboah',
+            'pickup_person_contact_no': '0244123456'
         }
 
         self.client.post(PARTICIPANT_URL, payload1)
         self.client.post(PARTICIPANT_URL, payload2)
         self.client.post(PARTICIPANT_URL, payload3)
 
-        res = self.client.get(PARTICIPANT_URL, {'grade': grade.id})
+        res = self.client.get(PARTICIPANT_URL, {'grade': 'Class 1'})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), 2)
-        self.assertEqual(res.data[0]['first_name'], payload3['first_name'])
+        self.assertEqual(res.data[1]['first_name'], payload3['first_name'])

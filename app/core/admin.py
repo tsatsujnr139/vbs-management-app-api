@@ -6,7 +6,7 @@ from core import models
 
 class UserAdmin(BaseUserAdmin):
     ordering = ['id']
-    list_display = ['email', 'name']
+    list_display = ['email', 'first_name', 'last_name']
     fieldsets = (
         (None, {
             'fields': (
@@ -15,7 +15,8 @@ class UserAdmin(BaseUserAdmin):
         }),
         (_('Personal Info'), {
             'fields': (
-                'name',)
+                'first_name',
+                'last_name')
         }),
         (_('Permissions'), {
             'fields': (
@@ -40,7 +41,5 @@ class UserAdmin(BaseUserAdmin):
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Grade)
 admin.site.register(models.Church)
-admin.site.register(models.PickupPerson)
-admin.site.register(models.Parent)
 admin.site.register(models.Participant)
 admin.site.register(models.Volunteer)

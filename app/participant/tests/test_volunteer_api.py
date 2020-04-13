@@ -14,12 +14,6 @@ VOLUNTEER_URL = reverse('participant:volunteer-list')
 VOLUNTEER_COUNT_URL = reverse('participant:volunteer-count')
 
 
-def sample_church(name='Legon Interdenominational Church'):
-    return Church.objects.create(
-        name=name
-    )
-
-
 def get_detail_url(volunteer_id):
     """return volunteer detail URL"""
     return reverse('participant:volunteer-detail',
@@ -49,7 +43,7 @@ class VolunteerTests(TestCase):
             email='tsatsujnr@gmail.com',
             gender='Male',
             preferred_class='Pre-School',
-            church=sample_church(),
+            church='Legon Interdenominational Church',
             previous_volunteer=True,
             previous_site='Pre-School'
         )
@@ -62,7 +56,7 @@ class VolunteerTests(TestCase):
             email='hetty@gmail.com',
             gender='Female',
             preferred_class='Class 1',
-            church=sample_church(name='Anglican Church'),
+            church='Anglican Church',
             previous_volunteer=True,
             previous_site='Pre-School'
         )
@@ -83,7 +77,7 @@ class VolunteerTests(TestCase):
             email='tsatsujnr@gmail.com',
             gender='Male',
             preferred_class='Pre-School',
-            church=sample_church(),
+            church='Legon Interdenominational Church',
             previous_volunteer=True,
             previous_site='Pre-School'
         )
@@ -96,7 +90,7 @@ class VolunteerTests(TestCase):
             email='hetty@gmail.com',
             gender='Female',
             preferred_class='Class 1',
-            church=sample_church(name='Anglican Church'),
+            church='Anglican Church',
             previous_volunteer=True,
             previous_site='Pre-School'
         )
@@ -115,7 +109,7 @@ class VolunteerTests(TestCase):
             'email': 'tsatsujnr@gmail.com',
             'gender': 'Male',
             'preferred_class': 'Pre-School',
-            'church': sample_church().id,
+            'church': 'Legon Interdenominational Church',
             'previous_volunteer': 1,
             'previous_site': 'Pre-School'
         }
@@ -138,7 +132,7 @@ class VolunteerTests(TestCase):
             'email': 'tsatsujnr@gmail.com',
             'gender': 'Male',
             'preferred_class': 'Pre-School',
-            'church': sample_church().id,
+            'church': 'Legon Interdenominational Church',
             'previous_volunteer': 1,
             'previous_site': 'Pre-School'
         }
@@ -162,7 +156,7 @@ class VolunteerTests(TestCase):
             email='hetty@gmail.com',
             gender='Female',
             preferred_class='Class 1',
-            church=sample_church(),
+            church='Legon Interdenominational Church',
             previous_volunteer=True,
             previous_site='Pre-School'
         )
@@ -183,7 +177,7 @@ class VolunteerTests(TestCase):
             email='hetty@gmail.com',
             gender='Female',
             preferred_class='Class 1',
-            church=sample_church(),
+            church='Legon Interdenominational Church',
             previous_volunteer=True,
             previous_site='Pre-School'
         )
@@ -202,7 +196,7 @@ class VolunteerTests(TestCase):
             email='tsatsujnr@gmail.com',
             gender='Male',
             preferred_class='Pre-School',
-            church=sample_church(),
+            church='Legon Interdenominational Church',
             previous_volunteer=True,
             previous_site='Pre-School'
         )
@@ -215,7 +209,7 @@ class VolunteerTests(TestCase):
             email='hetty@gmail.com',
             gender='Female',
             preferred_class='Class 1',
-            church=sample_church(name='Anglican Church'),
+            church='Anglican Church',
             previous_volunteer=True,
             previous_site='Pre-School'
         )

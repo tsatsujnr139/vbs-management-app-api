@@ -20,7 +20,8 @@ def sample_user():
     return {
         'email': 'user@email.com',
         'password': 'password123',
-        'name': 'test name'
+        'first_name': 'test',
+        'last_name': 'name',
     }
 
 
@@ -133,7 +134,8 @@ class PrivateUserTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, {
             'email': self.user.email,
-            'name': self.user.name
+            'first_name': self.user.first_name,
+            'last_name': self.user.last_name
         })
 
     def test_post_not_allowed_for_own_profile(self):
@@ -145,12 +147,12 @@ class PrivateUserTests(TestCase):
     def test_own_profile_update(self):
         """test updating profile for authenticated user"""
         payload = {
-            'name': 'new name',
+            'first_name': 'new',
             'password': 'new password'
         }
 
         res = self.client.patch(OWN_URL, payload)
         self.user.refresh_from_db()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(self.user.name, payload['name'])
+        self.assertEqual(self.user.first_name, payload['first_name'])
         self.assertTrue(self.user.check_password(payload['password']))
