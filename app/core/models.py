@@ -91,7 +91,7 @@ class Volunteer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     gender = models.CharField(max_length=6)
-    role = models.CharField(max_length=12)
+    preferred_role = models.CharField(max_length=12)
     church = models.CharField(max_length=150, blank=False)
     preferred_class = models.CharField(max_length=10, blank=False)
     contact_no = models.CharField(max_length=12, blank=False)
