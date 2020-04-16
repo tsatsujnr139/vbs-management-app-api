@@ -40,8 +40,11 @@ class ParticipantViewset(viewsets.GenericViewSet, mixins.ListModelMixin,
         """retrieve participants list for authenticated user"""
         queryset = Participant.objects.all()
         grade = self.request.query_params.get('grade', None)
+        last_name = self.request.query_params.get('last_name', None)
         if grade is not None:
             queryset = queryset.filter(grade=grade)
+        if last_name is not None:
+            queryset = queryset.filter(last_name__icontains=last_name)
         return queryset
 
 
@@ -50,7 +53,17 @@ class VolunteerViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
                        CountModelMixin):
     serializer_class = VolunteerSerializer
     pagination_class = pagination.api_settings.DEFAULT_PAGINATION_CLASS
-    queryset = Volunteer.objects.all()
     permission_classes = (permissions.ListAdminOnly,)
     authentication_classes = (TokenAuthentication,)
     lookup_field = ('id')
+
+    def get_queryset(self):
+        """retrieve participants list for authenticated user"""
+        grade = self.request.query_params.get('grade', None)
+        last_name = self.request.query_params.get('last_name', None)
+        queryset = Volunteer.objects.all()
+        if grade is not None:
+            queryset = Volunteer.objects.filter(grade=grade)
+        if last_name is not None:
+            queryset = Volunteer.objects.filter(last_name__icontains=last_name)
+        return queryset
