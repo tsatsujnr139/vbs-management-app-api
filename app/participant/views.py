@@ -41,7 +41,7 @@ class ParticipantViewset(viewsets.GenericViewSet, mixins.ListModelMixin,
 
     def get_queryset(self):
         """retrieve participants list for authenticated user"""
-        queryset = Participant.objects.all()
+        queryset = Participant.objects.all().order_by('-id')
         grade = self.request.query_params.get('grade', None)
         last_name = self.request.query_params.get('last_name', None)
         if grade is not None:
@@ -64,7 +64,7 @@ class VolunteerViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
         """retrieve participants list for authenticated user"""
         grade = self.request.query_params.get('grade', None)
         last_name = self.request.query_params.get('last_name', None)
-        queryset = Volunteer.objects.all()
+        queryset = Volunteer.objects.all().order_by('-id')
         if grade is not None:
             queryset = Volunteer.objects.filter(grade=grade)
         if last_name is not None:
