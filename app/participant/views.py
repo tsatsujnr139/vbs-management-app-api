@@ -1,6 +1,6 @@
+from django.utils.timezone import now
+from django.db.models import Sum, Count
 from rest_framework import viewsets, mixins, pagination
-from rest_framework.views import APIView
-from rest_framework.decorators import action
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
 from participant import permissions
@@ -72,7 +72,7 @@ class VolunteerViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
         return queryset
 
 
-class DashboardDataViewSet(viewsets.GenericViewSet):
+class DashboardDataViewSet(viewsets.ViewSet):
     """
     View to return dashboard data
 
@@ -83,19 +83,52 @@ class DashboardDataViewSet(viewsets.GenericViewSet):
     permission_classes = (permissions.isAdminUser,)
     authentication_classes = (TokenAuthentication,)
 
-    @action(methods="[GET]", detail=False, url_path="data",)
-    def get(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):
         """
         Return dashboard data
         """
         participant_queryset = Participant.objects.all()
         volunteer_queryset = Volunteer.objects.all()
+
+        year, week, _ = now().isocalendar()
+
+        participants_this_week_queryset = participant_queryset.filter(
+            created__iso_year=year, created__week=week)
+        volunteers_this_week_queryset = volunteer_queryset.filter(
+            created__iso_year=year, created__week=week)
+
         participant_church_queryset = participant_queryset.distinct('church')
         volunteer_church_queryset = volunteer_queryset.distinct('church')
+
+        participant_churches_this_week_queryset = (
+            participants_this_week_queryset.distinct('church'))
+        volunteer_churches_this_week_queryset = (
+            volunteers_this_week_queryset.distinct('church'))
+
+        participant_class_distribution = Participant.objects.values(
+            'grade').annotate(count=Count('grade'))
+
+        volunteer_class_distribution = Volunteer.objects.values(
+            'preferred_class').annotate(count=Count('preferred_class'))
+
         dashboard_data = {
-            'participant_count': participant_queryset.count(),
-            'volunteer_count': volunteer_queryset.count(),
-            'participant_church_count': participant_church_queryset.count(),
-            'volunteer_church_count': volunteer_church_queryset.count()
+            'overview': {
+                'participants': participant_queryset.count(),
+                'volunteers': volunteer_queryset.count(),
+                'participant_churches': participant_church_queryset.count(),
+                'volunteer_churches': volunteer_church_queryset.count(),
+                'participants_this_week':
+                    participants_this_week_queryset.count(),
+                'volunteers_this_week': volunteers_this_week_queryset.count(),
+                'participant_churches_this_week':
+                participant_churches_this_week_queryset.count(),
+                'volunteer_churches_this_week':
+                volunteer_churches_this_week_queryset.count(),
+            },
+            'distributions': {
+                'participant_class_distribution':
+                    participant_class_distribution,
+                'volunteer_class_distribution': volunteer_class_distribution
+            }
         }
         return Response(dashboard_data)
