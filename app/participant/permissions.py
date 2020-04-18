@@ -1,7 +1,7 @@
 from rest_framework import permissions
 
 
-class ListAdminOnly(permissions.BasePermission):
+class isAdminUser(permissions.BasePermission):
     """ Only allow admins to access list of objects"""
 
     def has_permission(self, request, view):

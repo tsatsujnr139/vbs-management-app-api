@@ -70,6 +70,7 @@ class Participant(models.Model):
     last_name = models.CharField(max_length=50, blank=False)
     gender = models.CharField(max_length=6)
     medical_info = models.TextField(blank=True)
+    age = models.IntegerField(blank=False)
     date_of_birth = models.DateField(default=now)
     grade = models.CharField(max_length=10, blank=False)
     parent_name = models.CharField(max_length=100, blank=False)

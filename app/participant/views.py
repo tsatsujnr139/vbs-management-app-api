@@ -1,5 +1,8 @@
 from rest_framework import viewsets, mixins, pagination
+from rest_framework.views import APIView
+from rest_framework.decorators import action
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.response import Response
 from participant import permissions
 
 
@@ -32,7 +35,7 @@ class ParticipantViewset(viewsets.GenericViewSet, mixins.ListModelMixin,
                          CountModelMixin):
     serializer_class = ParticipantSerializer
     pagination_class = pagination.api_settings.DEFAULT_PAGINATION_CLASS
-    permission_classes = (permissions.ListAdminOnly,)
+    permission_classes = (permissions.isAdminUser,)
     authentication_classes = (TokenAuthentication,)
     lookup_field = ('id')
 
@@ -53,7 +56,7 @@ class VolunteerViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
                        CountModelMixin):
     serializer_class = VolunteerSerializer
     pagination_class = pagination.api_settings.DEFAULT_PAGINATION_CLASS
-    permission_classes = (permissions.ListAdminOnly,)
+    permission_classes = (permissions.isAdminUser,)
     authentication_classes = (TokenAuthentication,)
     lookup_field = ('id')
 
@@ -67,3 +70,32 @@ class VolunteerViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
         if last_name is not None:
             queryset = Volunteer.objects.filter(last_name__icontains=last_name)
         return queryset
+
+
+class DashboardDataViewSet(viewsets.GenericViewSet):
+    """
+    View to return dashboard data
+
+    * Requires token authentication
+    * Only admin users are able to access this view
+
+    """
+    permission_classes = (permissions.isAdminUser,)
+    authentication_classes = (TokenAuthentication,)
+
+    @action(methods="[GET]", detail=False, url_path="data",)
+    def get(self, request, *args, **kwargs):
+        """
+        Return dashboard data
+        """
+        participant_queryset = Participant.objects.all()
+        volunteer_queryset = Volunteer.objects.all()
+        participant_church_queryset = participant_queryset.distinct('church')
+        volunteer_church_queryset = volunteer_queryset.distinct('church')
+        dashboard_data = {
+            'participant_count': participant_queryset.count(),
+            'volunteer_count': volunteer_queryset.count(),
+            'participant_church_count': participant_church_queryset.count(),
+            'volunteer_church_count': volunteer_church_queryset.count()
+        }
+        return Response(dashboard_data)
