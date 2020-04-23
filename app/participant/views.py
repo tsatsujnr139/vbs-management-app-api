@@ -32,7 +32,7 @@ class ChurchViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
 
 class ParticipantViewset(viewsets.GenericViewSet, mixins.ListModelMixin,
                          mixins.CreateModelMixin, mixins.RetrieveModelMixin,
-                         CountModelMixin):
+                         mixins.UpdateModelMixin, CountModelMixin, ):
     serializer_class = ParticipantSerializer
     pagination_class = pagination.api_settings.DEFAULT_PAGINATION_CLASS
     permission_classes = (permissions.isAdminUser,)
@@ -53,7 +53,7 @@ class ParticipantViewset(viewsets.GenericViewSet, mixins.ListModelMixin,
 
 class VolunteerViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
                        mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                       CountModelMixin):
+                       mixins.UpdateModelMixin, CountModelMixin):
     serializer_class = VolunteerSerializer
     pagination_class = pagination.api_settings.DEFAULT_PAGINATION_CLASS
     permission_classes = (permissions.isAdminUser,)

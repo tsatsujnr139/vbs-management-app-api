@@ -9,7 +9,7 @@ router.register('grades', views.GradeViewSet)
 router.register('churches', views.ChurchViewSet)
 router.register('participants', views.ParticipantViewset,
                 basename='participant')
-router.register('volunteers', views.VolunteerViewSet, basename='participant')
+router.register('volunteers', views.VolunteerViewSet, basename='volunteer')
 router.register('dashboard-data', views.DashboardDataViewSet,
                 basename='dashboard')
 
