@@ -37,7 +37,7 @@ class VolunteerTests(TestCase):
         Volunteer.objects.create(
             first_name='Tsatsu',
             last_name='Adogla-Bessa',
-            role='Teaching',
+            preferred_role='Teaching',
             contact_no='0500018351',
             email='tsatsujnr@gmail.com',
             gender='Male',
@@ -50,7 +50,7 @@ class VolunteerTests(TestCase):
         Volunteer.objects.create(
             first_name='Hetty',
             last_name='Yirenkyi-Boafo',
-            role='Teaching',
+            preferred_role='Teaching',
             contact_no='0243578943',
             email='hetty@gmail.com',
             gender='Female',
@@ -71,7 +71,7 @@ class VolunteerTests(TestCase):
         Volunteer.objects.create(
             first_name='Tsatsu',
             last_name='Adogla-Bessa',
-            role='Teaching',
+            preferred_role='Teaching',
             contact_no='0500018351',
             email='tsatsujnr@gmail.com',
             gender='Male',
@@ -84,7 +84,7 @@ class VolunteerTests(TestCase):
         Volunteer.objects.create(
             first_name='Hetty',
             last_name='Yirenkyi-Boafo',
-            role='Teaching',
+            preferred_role='Teaching',
             contact_no='0243578943',
             email='hetty@gmail.com',
             gender='Female',
