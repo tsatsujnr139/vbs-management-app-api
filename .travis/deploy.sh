@@ -7,5 +7,6 @@ git push production master
 
 ssh git@$IP <<EOF
   cd $DEPLOY_DIR
-  sudo docker run -p 8000:8000 -i -t vbs-registration-app-api_app
+  docker build -t vbs-registration-app-api
+  docker run -p 8000:8000 -i -t vbs-registration-app-api
 EOF

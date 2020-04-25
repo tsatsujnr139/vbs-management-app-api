@@ -20,19 +20,19 @@ class GradeViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
                    mixins.CreateModelMixin):
     """view for managing grades in the application"""
     serializer_class = GradeSerializer
-    queryset = Grade.objects.all()
+    queryset = Grade.objects.all().order_by('-id')
 
 
 class ChurchViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,
-                    mixins.CreateModelMixin, CountModelMixin):
+                    mixins.CreateModelMixin):
     """view for managing churches in the application"""
     serializer_class = ChurchSerializer
-    queryset = Church.objects.all()
+    queryset = Church.objects.all().order_by('-id')
 
 
 class ParticipantViewset(viewsets.GenericViewSet, mixins.ListModelMixin,
                          mixins.CreateModelMixin, mixins.RetrieveModelMixin,
-                         mixins.UpdateModelMixin, CountModelMixin, ):
+                         mixins.UpdateModelMixin):
     serializer_class = ParticipantSerializer
     pagination_class = pagination.api_settings.DEFAULT_PAGINATION_CLASS
     permission_classes = (permissions.isAdminUser,)
@@ -53,7 +53,7 @@ class ParticipantViewset(viewsets.GenericViewSet, mixins.ListModelMixin,
 
 class VolunteerViewSet(viewsets.GenericViewSet, mixins.CreateModelMixin,
                        mixins.ListModelMixin, mixins.RetrieveModelMixin,
-                       mixins.UpdateModelMixin, CountModelMixin):
+                       mixins.UpdateModelMixin):
     serializer_class = VolunteerSerializer
     pagination_class = pagination.api_settings.DEFAULT_PAGINATION_CLASS
     permission_classes = (permissions.isAdminUser,)
