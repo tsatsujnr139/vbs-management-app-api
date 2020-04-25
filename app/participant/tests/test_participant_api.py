@@ -31,12 +31,12 @@ def sample_participant(**params):
     defaults = {
         'first_name': 'Adoma',
         'last_name': 'Asomaning',
+        'age': 8,
         'date_of_birth': '2004-01-01',
         'gender': 'Female',
         'church': 'Legon interdenominational Church',
         'parent_name': "Aforo Asomaning",
         'primary_contact_no': '0244123456',
-        'whatsApp_no': '0244123456',
         'alternate_contact_no': '0244123456',
         'email': 'aforo@gmail.com',
         'pickup_person_name': 'Aforo Asomaning',
@@ -102,6 +102,7 @@ class ParticipantsApiTests(TestCase):
             'gender': 'Female',
             'date_of_birth': '2000-01-01',
             'medical_information': '',
+            'age': 8,
             'grade': 'Class 1',
             'church': 'Legon Interdenominational Church',
             'parent_name': "Aforo Asomaning",
@@ -147,16 +148,6 @@ class ParticipantsApiTests(TestCase):
         res = self.client.get(url)
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    def test_retrieve_participant_count(self):
-        """Test retrieval of number of registered participant"""
-        sample_participant()
-
-        sample_participant()
-
-        res = self.client.get(PARTICIPANT_COUNT_URL)
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data['count'], 2)
-
     def test_retrieve_participant_list_by_class(self):
         """Test retrieving participant list by class api"""
 
@@ -174,6 +165,7 @@ class ParticipantsApiTests(TestCase):
             'date_of_birth': '2000-01-01',
             'medical_information': '',
             'grade': 'Class 1',
+            'age': 8,
             'church': 'Legon Interdenominational Church',
             'parent_name': "Aforo Asomaning",
             'primary_contact_no': '0244123456',
@@ -191,6 +183,7 @@ class ParticipantsApiTests(TestCase):
             'date_of_birth': '2000-01-01',
             'medical_information': '',
             'grade': 'JHS 1',
+            'age': 11,
             'church': 'Legon Interdenominational Church',
             'parent_name': "Aforo Asomaning",
             'primary_contact_no': '0244123456',
@@ -208,6 +201,7 @@ class ParticipantsApiTests(TestCase):
             'date_of_birth': '2000-01-01',
             'medical_information': '',
             'grade': 'Class 1',
+            'age': 8,
             'church': 'Legon Interdenominational Church',
             'parent_name': "Kafui Yeboah",
             'primary_contact_no': '0244123456',

@@ -75,7 +75,7 @@ class ModelTests(TestCase):
         self.assertEqual(str(church), church.name)
 
     def test_participant_str(self):
-        """test particpant string representation"""
+        """test participant string representation"""
         participant = models.Participant.objects.create(
             first_name='Adoma',
             last_name='Asomaning',
