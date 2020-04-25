@@ -30,11 +30,11 @@ class ChurchApiTests(TestCase):
             name='Legon Interdenominational Church')
         Church.objects.create(name='Christ Anglican Church')
 
-        churches = Church.objects.all().order_by('id')
+        churches = Church.objects.all().order_by('-id')
         serializer = ChurchSerializer(churches, many=True)
         res = self.client.get(CHURCHES_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data.results, serializer.data)
+        self.assertEqual(res.data['results'], serializer.data)
 
     def test_add_church(self):
         """test adding a new church"""

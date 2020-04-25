@@ -62,9 +62,9 @@ class VolunteerTests(TestCase):
 
         res = self.client.get(VOLUNTEER_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        volunteers = Volunteer.objects.all().order_by('id')
+        volunteers = Volunteer.objects.all().order_by('-id')
         serializer = VolunteerSerializer(volunteers, many=True)
-        self.assertEqual(res.data, serializer.data)
+        self.assertEqual(res.data['results'], serializer.data)
 
     def test_retrieve_volunteers_for_unauthorized_user(self):
         """Test retrieval of volunteer list for unauthorized user """

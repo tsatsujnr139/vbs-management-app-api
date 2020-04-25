@@ -72,20 +72,22 @@ class ParticipantsApiTests(TestCase):
         Participant.objects.create(
             first_name='Adoma',
             last_name='Asomaning',
-            date_of_birth='2003-01-01'
+            date_of_birth='2003-01-01',
+            age=9
         )
 
         Participant.objects.create(
             first_name='Aba',
             last_name='Asomaning',
-            date_of_birth='2000-01-01'
+            date_of_birth='2000-01-01',
+            age=11
         )
 
-        participants = Participant.objects.all().order_by('id')
+        participants = Participant.objects.all().order_by('-id')
         res = self.client.get(PARTICIPANT_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         serializer = ParticipantSerializer(participants, many=True)
-        self.assertEqual(serializer.data, res.data)
+        self.assertEqual(serializer.data, res.data['results'])
 
     def test_retrieve_participants_unauthorized_user(self):
         """test retrieve participant list for unauthorized user"""
@@ -217,5 +219,6 @@ class ParticipantsApiTests(TestCase):
 
         res = self.client.get(PARTICIPANT_URL, {'grade': 'Class 1'})
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(res.data), 2)
-        self.assertEqual(res.data[1]['first_name'], payload3['first_name'])
+        self.assertEqual(len(res.data['results']), 2)
+        self.assertEqual(res.data['results'][1]
+                         ['first_name'], payload1['first_name'])

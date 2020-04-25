@@ -1,5 +1,5 @@
 from django.utils.timezone import now
-from django.db.models import Sum, Count
+from django.db.models import Count
 from rest_framework import viewsets, mixins, pagination
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.response import Response
@@ -13,7 +13,6 @@ from participant.serializers import (GradeSerializer,
 
 from core.models import (Grade, Church,
                          Participant, Volunteer)
-from core.mixins import CountModelMixin
 
 
 class GradeViewSet(viewsets.GenericViewSet, mixins.ListModelMixin,

@@ -22,11 +22,11 @@ class GradeApiTests(TestCase):
         Grade.objects.create(name='Class 1')
         Grade.objects.create(name='Class 2')
 
-        grades = Grade.objects.all().order_by('id')
+        grades = Grade.objects.all().order_by('-id')
         serializer = GradeSerializer(grades, many=True)
         res = self.client.get(GRADE_URL)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(res.data.results, serializer.data)
+        self.assertEqual(res.data['results'], serializer.data)
 
     def test_add_grade(self):
         """test adding a new grade"""
