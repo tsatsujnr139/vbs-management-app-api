@@ -83,7 +83,6 @@ class ModelTests(TestCase):
             church='Legon interdenominational Church',
             parent_name="Aforo Asomaning",
             primary_contact_no='0244123456',
-            whatsApp_no='0244123456',
             alternate_contact_no='0244123456',
             email='aforo@gmail.com',
             pickup_person_name='Aforo Asomaning',
@@ -101,7 +100,7 @@ class ModelTests(TestCase):
         volunteer = models.Volunteer.objects.create(
             first_name='Tsatsu',
             last_name='Adogla-Bessa',
-            role='Teaching',
+            preferred_role='Teaching',
             contact_no='0500018351',
             email='tsatsujnr@gmail.com',
             gender='Male',
