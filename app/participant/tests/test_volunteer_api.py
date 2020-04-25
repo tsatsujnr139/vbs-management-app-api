@@ -5,13 +5,12 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from core.models import Volunteer, Church
+from core.models import Volunteer
 
 from participant.serializers import VolunteerSerializer
 
 
 VOLUNTEER_URL = reverse('participant:volunteer-list')
-VOLUNTEER_COUNT_URL = reverse('participant:volunteer-count')
 
 
 def get_detail_url(volunteer_id):

@@ -11,7 +11,6 @@ from participant.serializers import ParticipantSerializer
 
 
 PARTICIPANT_URL = reverse('participant:participant-list')
-PARTICIPANT_COUNT_URL = reverse('participant:participant-count')
 
 
 def sample_church(name='Legon Interdenominational Church'):

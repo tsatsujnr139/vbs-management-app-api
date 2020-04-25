@@ -10,7 +10,6 @@ from participant.serializers import ChurchSerializer
 
 
 CHURCHES_URL = reverse('participant:church-list')
-CHURCHES_COUNT_URL = reverse('participant:church-count')
 
 
 class ChurchApiTests(TestCase):
