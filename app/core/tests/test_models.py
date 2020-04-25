@@ -80,6 +80,7 @@ class ModelTests(TestCase):
             first_name='Adoma',
             last_name='Asomaning',
             grade='Class 3',
+            age=8,
             church='Legon interdenominational Church',
             parent_name="Aforo Asomaning",
             primary_contact_no='0244123456',
