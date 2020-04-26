@@ -14,7 +14,7 @@ services:
               python manage.py migrate && 
               && gunicorn --certfile=/etc/letsencrypt/live/tsatsujnr.com/cert.pem
               --keyfile=/etc/letsencrypt/live/tsatsujnr.com/privkey.pem
-              hello_earth.wsgi:application --bind 0.0.0.0:443"
+              vbs-registration-app-api.wsgi:application --bind 0.0.0.0:443"
     container_name: vbs-registration-app-api
     expose:
       - "443"
