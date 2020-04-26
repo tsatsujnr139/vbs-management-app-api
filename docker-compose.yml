@@ -15,7 +15,7 @@ services:
               gunicorn --certfile=/etc/certs/fullchain.pem --keyfile=/etc/certs/privkey.pem vbs_registration.wsgi:application --bind 0.0.0.0:8000"
     container_name: vbs_registration
     expose:
-      - "8000"
+      - "443"
     environment:
       - DB_HOST=db
       - DB_NAME=vbs_registration_dev
@@ -27,7 +27,7 @@ services:
     image: nginx:latest
     container_name: ng
     ports:
-      - "443:8000"
+      - "443:443"
       - "80:80"
     volumes:
       - ./config/nginx/:/etc/nginx/conf.d
