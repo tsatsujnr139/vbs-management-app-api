@@ -16,7 +16,8 @@ services:
               --keyfile=/etc/letsencrypt/live/tsatsujnr.com/privkey.pem
               hello_earth.wsgi:application --bind 0.0.0.0:443"
     container_name: vbs-registration-app-api
-    expose: - "443"
+    expose:
+      - "443"
     environment:
       - DB_HOST=db
       - DB_NAME=vbs_registration_dev
@@ -32,7 +33,7 @@ services:
       - "80:80"
     volumes:
       - ./config/nginx/:/etc/nginx/conf.d
-    depends_on: 
+    depends_on:
       - app
 
   db:
