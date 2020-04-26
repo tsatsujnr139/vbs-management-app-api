@@ -12,9 +12,7 @@ services:
     command: >
       sh -c  "python manage.py wait_for_db  && 
               python manage.py migrate && 
-              gunicorn --certfile=/etc/letsencrypt/live/tsatsujnr.com/cert.pem
-              --keyfile=/etc/letsencrypt/live/tsatsujnr.com/privkey.pem
-              hello_earth.wsgi:application --bind 0.0.0.0:443"
+              gunicorn --certfile=/etc/letsencrypt/live/tsatsujnr.com/cert.pem --keyfile=/etc/letsencrypt/live/tsatsujnr.com/privkey.pem vbs-registration-app-api.wsgi:application --bind 0.0.0.0:443"
     container_name: vbs-registration-app-api
     expose:
       - "443"
