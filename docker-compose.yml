@@ -12,10 +12,10 @@ services:
     command: >
       sh -c  "python manage.py wait_for_db  && 
               python manage.py migrate && 
-              gunicorn --certfile=/etc/certs/fullchain.pem --keyfile=/etc/certs/privkey.pem app.wsgi:application --bind 0.0.0.0:443"
+              gunicorn --certfile=/etc/certs/fullchain.pem --keyfile=/etc/certs/privkey.pem app.wsgi:application --bind 0.0.0.0:8000"
     container_name: app
     expose:
-      - "443"
+      - "8000"
     environment:
       - DB_HOST=db
       - DB_NAME=vbs_registration_dev
@@ -27,8 +27,8 @@ services:
     image: nginx:latest
     container_name: ng
     ports:
-      - "443:443"
-      - "80:80"
+      - "443:8000"
+      - "80:8080"
     volumes:
       - ./config/nginx/:/etc/nginx/conf.d
     depends_on:
