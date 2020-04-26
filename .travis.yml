@@ -6,7 +6,7 @@ services:
 script:
   - docker-compose run app sh -c "python manage.py test && flake8"
 addons:
-  ssh_known_hosts: 199.241.137.145
+  ssh_known_hosts: $IP
 before_install:
   - openssl aes-256-cbc -K $encrypted_db2095f63ba3_key -iv $encrypted_db2095f63ba3_iv
     -in .travis/deploy_rsa.enc -out .travis/deploy_rsa -d
