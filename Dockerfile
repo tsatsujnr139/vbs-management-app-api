@@ -17,4 +17,6 @@ COPY ./app /app
 
 RUN adduser -D user
 
+RUN usermod -aG sudo user
+
 USER user
