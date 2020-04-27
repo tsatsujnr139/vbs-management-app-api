@@ -17,6 +17,4 @@ COPY ./app /app
 
 RUN adduser -D user
 
-RUN chown user:user -R /etc/certs
-
 USER user
