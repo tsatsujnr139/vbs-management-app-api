@@ -69,17 +69,20 @@ class Participant(models.Model):
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
     gender = models.CharField(max_length=6)
-    medical_info = models.TextField(blank=True)
+    medical_info = models.TextField(blank=True, null=True)
     age = models.IntegerField(blank=False)
     date_of_birth = models.DateField(default=now)
     grade = models.CharField(max_length=10, blank=False)
     parent_name = models.CharField(max_length=100, blank=False)
     primary_contact_no = models.CharField(max_length=12, blank=False)
     alternate_contact_no = models.CharField(max_length=12, blank=False)
+    whatsApp_no = models.CharField(max_length=12, blank=True, null=True)
     email = models.EmailField(max_length=100, blank=True)
     church = models.CharField(max_length=150, blank=False)
-    pickup_person_name = models.CharField(max_length=100)
-    pickup_person_contact_no = models.CharField(max_length=12, blank=False)
+    pickup_person_name = models.CharField(max_length=100, blank=True,
+                                          null=True)
+    pickup_person_contact_no = models.CharField(max_length=12,
+                                                blank=True, null=True)
     created = models.DateTimeField(default=now, editable=False)
     modified = models.DateTimeField(auto_now_add=True)
 

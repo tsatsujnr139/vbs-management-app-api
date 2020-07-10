@@ -23,6 +23,9 @@ class ChurchSerializer(serializers.ModelSerializer):
 
 class ParticipantSerializer(serializers.ModelSerializer):
     """Serializer for participant model"""
+    pickup_person_name = serializers.CharField(required=False)
+    pickup_person_contact_no = serializers.CharField(required=False)
+    medical_info = serializers.CharField(required=False)
 
     class Meta:
         model = Participant

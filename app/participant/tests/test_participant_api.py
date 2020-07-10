@@ -102,7 +102,6 @@ class ParticipantsApiTests(TestCase):
             'last_name': 'Asomaning',
             'gender': 'Female',
             'date_of_birth': '2000-01-01',
-            'medical_information': '',
             'age': 8,
             'grade': 'Class 1',
             'church': 'Legon Interdenominational Church',
@@ -110,9 +109,7 @@ class ParticipantsApiTests(TestCase):
             'primary_contact_no': '0244123456',
             'whatsApp_no': '0244123456',
             'alternate_contact_no': '0244123456',
-            'email': 'aforo@gmail.com',
-            'pickup_person_name': 'Aforo Asomaning',
-            'pickup_person_contact_no': '0244123456'
+            'email': 'aforo@gmail.com'
         }
 
         res = self.client.post(PARTICIPANT_URL, payload)
@@ -164,7 +161,6 @@ class ParticipantsApiTests(TestCase):
             'last_name': 'Surname',
             'gender': 'Female',
             'date_of_birth': '2000-01-01',
-            'medical_information': '',
             'grade': 'Class 1',
             'age': 8,
             'church': 'Legon Interdenominational Church',
@@ -172,9 +168,7 @@ class ParticipantsApiTests(TestCase):
             'primary_contact_no': '0244123456',
             'whatsApp_no': '0244123456',
             'alternate_contact_no': '0244123456',
-            'email': 'aforo@gmail.com',
-            'pickup_person_name': 'Aforo Asomaning',
-            'pickup_person_contact_no': '0244123456'
+            'email': 'aforo@gmail.com'
         }
 
         payload2 = {
@@ -182,7 +176,6 @@ class ParticipantsApiTests(TestCase):
             'last_name': 'Asomaning',
             'gender': 'Female',
             'date_of_birth': '2000-01-01',
-            'medical_information': '',
             'grade': 'JHS 1',
             'age': 11,
             'church': 'Legon Interdenominational Church',
@@ -190,9 +183,7 @@ class ParticipantsApiTests(TestCase):
             'primary_contact_no': '0244123456',
             'whatsApp_no': '0244123456',
             'alternate_contact_no': '0244123456',
-            'email': 'aforo@gmail.com',
-            'pickup_person_name': 'Aforo Asomaning',
-            'pickup_person_contact_no': '0244123456'
+            'email': 'aforo@gmail.com'
         }
 
         payload3 = {
@@ -200,7 +191,6 @@ class ParticipantsApiTests(TestCase):
             'last_name': 'Yeboah',
             'gender': 'Female',
             'date_of_birth': '2000-01-01',
-            'medical_information': '',
             'grade': 'Class 1',
             'age': 8,
             'church': 'Legon Interdenominational Church',
@@ -208,9 +198,7 @@ class ParticipantsApiTests(TestCase):
             'primary_contact_no': '0244123456',
             'whatsApp_no': '0244123456',
             'alternate_contact_no': '0244123456',
-            'email': 'aforo@gmail.com',
-            'pickup_person_name': 'Kafui Yeboah',
-            'pickup_person_contact_no': '0244123456'
+            'email': 'aforo@gmail.com'
         }
 
         self.client.post(PARTICIPANT_URL, payload1)
