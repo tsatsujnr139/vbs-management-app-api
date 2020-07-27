@@ -46,5 +46,7 @@ services:
       - POSTGRES_DB=vbs_registration_dev
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=mypassword
+    ports:
+      - "5432:5432"
 volumes:
   postgres_data:
