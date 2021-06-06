@@ -141,4 +141,4 @@ cython_debug/
 .vscode
 .history
 .DS_Store
-docker-compose-debug.yml
+docker-compose.debug.yml
