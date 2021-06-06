@@ -12,3 +12,6 @@ psycopg2>=2.8.3,<2.9.0
 django-jazzmin>=2.4.7,<2.5.0
 django-admin-export-action>=0.2.3,<0.3.0
 six>=1.16.0,<1.17.0
+
+#static file management
+whitenoise>=5.2.0,<5.3.0
