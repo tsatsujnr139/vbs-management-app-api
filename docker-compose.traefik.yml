@@ -42,7 +42,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       # Mount the volume to store the certificates
       - traefik-public-certificates:/certificates
-      - ./static/:/code/static/
     command:
       # Enable Docker in Traefik, so that it reads labels from Docker services
       - --providers.docker
