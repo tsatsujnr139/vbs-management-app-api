@@ -12,6 +12,12 @@ services:
               gunicorn vbs_registration.wsgi:application --bind 0.0.0.0:80 &&
               python manage.py collectstatic --noinput"
     container_name: lic-vbs-api
+    environment:
+      - DB_HOST=db
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
     labels:
       # Enable Traefik for this specific "backend" service
       - traefik.enable=true
@@ -43,6 +49,10 @@ services:
     image: postgres:10-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=$POSTGRES_DB
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
     networks:
       - traefik-public
 volumes:
