@@ -7,7 +7,7 @@ services:
       - 80:80
       # Listen on port 443, default for HTTPS
       - 443:443
-    container_name: creion-traefik-router
+    container_name: tsatsujnr-traefik-router
     restart: always
     labels:
       # Enable Traefik for this service, to make it available in the public network
@@ -52,7 +52,7 @@ services:
       # Create an entrypoint "https" listening on port 443
       - --entrypoints.https.address=:443
       # Create the certificate resolver "le" for Let's Encrypt, uses the environment variable EMAIL
-      - --certificatesresolvers.le.acme.email=creion.live@gmail.com
+      - --certificatesresolvers.le.acme.email=tsatsujnr@gmail.com
       # Store the Let's Encrypt certificates in the mounted volume
       - --certificatesresolvers.le.acme.storage=/certificates/acme.json
       # Use the TLS Challenge for Let's Encrypt

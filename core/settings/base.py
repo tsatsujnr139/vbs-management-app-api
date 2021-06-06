@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "user",
     "participant",
     "corsheaders",
+    'admin_export_action',
 ]
 
 MIDDLEWARE = [
@@ -127,6 +128,10 @@ JAZZMIN_SETTINGS = {
 JAZZMIN_UI_TWEAKS = {
     "theme": "yeti",
     "dark_mode_theme": "",
+}
+
+ADMIN_EXPORT_ACTION = {
+    'ENABLE_SITEWIDE': False
 }
 
 

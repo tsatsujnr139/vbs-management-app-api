@@ -3,6 +3,8 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext as _
 from core import models
 
+from admin_export_action.admin import export_selected_objects
+
 
 @admin.register(models.User)
 class UserAdmin(BaseUserAdmin):
@@ -42,6 +44,10 @@ class ParticipantAdmin(admin.ModelAdmin):
     list_filter = ("grade", "gender", "age")
     search_fields = ("first_name", "last_name", "parent_name", "church")
 
+    actions = [
+        export_selected_objects,
+    ]
+
 
 @admin.register(models.Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
@@ -60,6 +66,10 @@ class VolunteerAdmin(admin.ModelAdmin):
         "previous_site",
     )
     search_fields = ("first_name", "last_name")
+
+    actions = [
+        export_selected_objects,
+    ]
 
 
 @admin.register(models.Grade)

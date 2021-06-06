@@ -18,14 +18,19 @@ from django.urls import path, include
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/user/', include('user.urls')),
-    path('api/', include('participant.urls'))
+    path("admin/", admin.site.urls),
+    path("api/user/", include("user.urls")),
+    path("api/", include("participant.urls")),
+    path(
+        "export_action/",
+        include("admin_export_action.urls", namespace="admin_export_action"),
+    ),
 ]
 
 
 if settings.DEBUG:
     import debug_toolbar
+
     urlpatterns = [
-        path('__debug__/', include(debug_toolbar.urls)),
+        path("__debug__/", include(debug_toolbar.urls)),
     ] + urlpatterns

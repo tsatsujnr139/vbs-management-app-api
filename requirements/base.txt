@@ -8,4 +8,6 @@ flake8>=3.7.8,<3.8.0
 # Database
 psycopg2>=2.8.3,<2.9.0
 
+#utils
 django-jazzmin>=2.4.7,<2.5.0
+django-admin-export-action>=0.2.3,<0.3.0
