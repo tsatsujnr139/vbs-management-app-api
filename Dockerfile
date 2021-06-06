@@ -1,20 +1,16 @@
-FROM python:3.7-alpine
+FROM python:3.7
 LABEL maintainer="Tsatsu Adogla-Bessa Jnr"
 
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-COPY ./requirements.txt /requirements.txt
-RUN apk add --update --no-cache postgresql-client
-RUN apk add --update --no-cache --virtual .tmp-build-deps \
-    gcc libc-dev linux-headers postgresql-dev
-RUN pip install -r /requirements.txt
-RUN apk del .tmp-build-deps
+RUN mkdir /code
+WORKDIR /code
 
-RUN mkdir /app
-WORKDIR /app
-COPY ./app /app
+COPY requirements /code/requirements
 
-RUN adduser -D user
+ARG requirements=requirements/production.txt
 
-USER user
+RUN pip install -r $requirements
+
+COPY . /code/

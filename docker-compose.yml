@@ -1,52 +1,53 @@
 version: "3"
 
 services:
-  app:
+  web:
     build:
       context: .
-    # ports:
-    #   - "8000:8000"
     volumes:
-      - ./app:/app
-      - ./config/nginx/certs/:/etc/certs
-      - ./app/static/:/app/static/
+      - ./:/code
     command: >
       sh -c  "python manage.py wait_for_db  && 
               python manage.py migrate && 
-              gunicorn vbs_registration.wsgi:application --bind 0.0.0.0:8000"
-    container_name: vbs_registration
-    # ports:
-    #   - "8000:8000"
-    expose:
-      - "8000"
-    environment:
-      - DB_HOST=db
-      - DB_NAME=vbs_registration_dev
-      - DB_USER=postgres
-      - DB_PASS=mypassword
+              gunicorn vbs_registration.wsgi:application --bind 0.0.0.0:80 &&
+              python manage.py collectstatic --noinput"
+    container_name: lic-vbs-api
+    labels:
+      # Enable Traefik for this specific "backend" service
+      - traefik.enable=true
+      # Define the port inside of the Docker service to use
+      - traefik.http.services.vbs-api.loadbalancer.server.port=80
+      # Make Traefik use this domain in HTTP
+      - traefik.http.routers.vbs-api-http.entrypoints=http
+      - traefik.http.routers.auth-service-http.rule=Host(`vbs.tsatsujnr.com`) || Host(`admin.vbs.tsatsujnr.com`)
+      # Use the traefik-public network (declared below)
+      - traefik.docker.network=traefik-public
+      # Make Traefik use this domain in HTTPS
+      - traefik.http.routers.vbs-api-https.entrypoints=https
+      - traefik.http.routers.vbs-api-https.rule=Host(`vbs.tsatsujnr.com`) || Host(`admin.vbs.tsatsujnr.com`)
+      - traefik.http.routers.vbs-api-https.tls=true
+      # Use the "le" (Let's Encrypt) resolver
+      - traefik.http.routers.vbs-api-https.tls.certresolver=le
+      # https-redirect middleware to redirect HTTP to HTTPS
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+      # Middleware to redirect HTTP to HTTPS
+      - traefik.http.routers.vbs-api-http.middlewares=https-redirect
+    networks:
+      # Use the public network created to be shared between Traefik and
+      # any other service that needs to be publicly available with HTTPS
+      - traefik-public
     depends_on:
       - db
-  nginx:
-    image: nginx:latest
-    container_name: ng
-    ports:
-      - "443:443"
-      - "80:80"
-    volumes:
-      - ./config/nginx/:/etc/nginx/conf.d
-      - ./app/static/:/app/static/
-    depends_on:
-      - app
-
   db:
     image: postgres:10-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_DB=vbs_registration_dev
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=mypassword
-    ports:
-      - "5432:5432"
+    networks:
+      - traefik-public
 volumes:
   postgres_data:
+
+networks:
+  traefik-public:
+    external: true

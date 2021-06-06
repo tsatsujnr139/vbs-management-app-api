@@ -1,0 +1,27 @@
+version: "3"
+
+services:
+  web:
+    build:
+      context: .
+      args:
+        requirements: requirements/development.txt
+    command: >
+      sh -c  "python manage.py wait_for_db  && 
+              python manage.py migrate && 
+              python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - DB_HOST=db
+      - POSTGRES_DB=vbs_registration_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mypassword
+    ports:
+      - "8000:8000"
+  db:
+    environment:
+      - POSTGRES_DB=vbs_registration_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=mypassword
+networks:
+  traefik-public:
+    external: false
