@@ -14,6 +14,7 @@ services:
       - POSTGRES_USER=$POSTGRES_USER
       - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
       - DJANGO_SECRET_KEY=$DJANGO_SECRET_KEY
+      - DJANGO_ALLOWED_HOSTS=$DJANGO_ALLOWED_HOSTS
     labels:
       # Enable Traefik for this specific "backend" service
       - traefik.enable=true
