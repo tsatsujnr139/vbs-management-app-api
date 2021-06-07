@@ -7,7 +7,7 @@ ENV PYTHONDONTWRITEBYTECODE 1
 RUN mkdir /code
 WORKDIR /code
 
-COPY requirements /code/requirements
+COPY requirements ./requirements
 
 ARG requirements=requirements/production.txt
 
