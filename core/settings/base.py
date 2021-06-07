@@ -39,15 +39,14 @@ INSTALLED_APPS = [
     "user",
     "participant",
     "corsheaders",
-    'admin_export_action',
+    "admin_export_action",
 ]
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -123,7 +122,7 @@ JAZZMIN_SETTINGS = {
     "copyright": "tsatsujnr",
     "search_model": "core.User",
     "related_modal_active": True,
-    "show_ui_builder": True
+    "show_ui_builder": True,
 }
 
 JAZZMIN_UI_TWEAKS = {
@@ -131,9 +130,7 @@ JAZZMIN_UI_TWEAKS = {
     "dark_mode_theme": "",
 }
 
-ADMIN_EXPORT_ACTION = {
-    'ENABLE_SITEWIDE': False
-}
+ADMIN_EXPORT_ACTION = {"ENABLE_SITEWIDE": False}
 
 
 # Internationalization
@@ -152,9 +149,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
 STATIC_URL = "/static/"
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 AUTH_USER_MODEL = "core.User"
