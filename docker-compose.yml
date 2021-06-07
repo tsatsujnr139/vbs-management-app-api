@@ -21,7 +21,7 @@ services:
       - traefik.http.services.vbs-api.loadbalancer.server.port=80
       # Make Traefik use this domain in HTTP
       - traefik.http.routers.vbs-api-http.entrypoints=http
-      - traefik.http.routers.auth-service-http.rule=Host(`vbs.tsatsujnr.com`) || Host(`vbs-admin.tsatsujnr.com`)
+      - traefik.http.routers.vbs-api-http.rule=Host(`vbs.tsatsujnr.com`) || Host(`vbs-admin.tsatsujnr.com`)
       # Use the traefik-public network (declared below)
       - traefik.docker.network=traefik-public
       # Make Traefik use this domain in HTTPS
