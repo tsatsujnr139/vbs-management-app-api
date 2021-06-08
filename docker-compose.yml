@@ -6,7 +6,7 @@ services:
     command: >
       sh -c  "python manage.py wait_for_db  && 
               python manage.py migrate && 
-              gunicorn vbs_registration.wsgi:application --bind 0.0.0.0:80"
+              gunicorn --bind 0.0.0.0:80 vbs_registration.wsgi"
     container_name: lic-vbs-api
     environment:
       - DB_HOST=db
