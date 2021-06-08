@@ -7,7 +7,7 @@ services:
       args:
         requirements: ./requirements/development.txt
     volumes:
-      - .:/code
+      - .:/app
     command: >
       sh -c  "python manage.py wait_for_db  && 
               python manage.py migrate && 
