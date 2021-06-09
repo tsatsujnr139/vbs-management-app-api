@@ -38,10 +38,12 @@ INSTALLED_APPS = [
     "core",
     "user",
     "participant",
+    "corsheaders",
     "admin_export_action",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",

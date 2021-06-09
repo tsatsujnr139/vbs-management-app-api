@@ -62,8 +62,8 @@ class Church(models.Model):
         return self.name
 
 
-MALE = "MALE"
-FEMALE = "FEMALE"
+MALE = "Male"
+FEMALE = "Female"
 
 GENDER_OPTIONS = (
     (MALE, "MALE"),
@@ -143,6 +143,8 @@ class Session(models.Model):
 
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=250)
+    eligible_grades = models.ManyToManyField('Grade')
+    supported_attendance_types = models.ManyToManyField('AttendanceType')
     start_date = models.DateField(null=False, blank=False)
     end_date = models.DateField(null=False, blank=False)
     created = models.DateTimeField(default=now, editable=False)

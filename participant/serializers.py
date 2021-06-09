@@ -1,19 +1,17 @@
 from rest_framework import serializers
 
-from core.models import Grade, Church, Participant, Volunteer, AttendanceType
+from core.models import (
+    Grade,
+    Church,
+    Participant,
+    Volunteer,
+    AttendanceType,
+    Session,
+)
 
 
 class GradeSerializer(serializers.ModelSerializer):
     """serializer for grade model"""
-
-    class Meta:
-        model = Grade
-        fields = "__all__"
-        read_only_fields = ("id",)
-
-
-class SessionSerializer(serializers.ModelSerializer):
-    """serializer for session model"""
 
     class Meta:
         model = Grade
@@ -26,6 +24,18 @@ class AttendanceTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AttendanceType
+        fields = "__all__"
+        read_only_fields = ("id",)
+
+
+class SessionSerializer(serializers.ModelSerializer):
+    """serializer for session model"""
+
+    eligible_grades = GradeSerializer(many=True, read_only=True)
+    supported_attendance_types = AttendanceTypeSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Session
         fields = "__all__"
         read_only_fields = ("id",)
 
