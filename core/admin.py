@@ -43,7 +43,13 @@ class ParticipantAdmin(admin.ModelAdmin):
         "session",
         "attendance_type",
     )
-    list_filter = ("grade", "gender", "age")
+    list_filter = (
+        "grade",
+        "gender",
+        "age",
+        "session",
+        "attendance_type",
+    )
     search_fields = ("first_name", "last_name", "parent_name", "church")
 
     actions = [
