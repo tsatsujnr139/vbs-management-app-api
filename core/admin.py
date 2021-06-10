@@ -40,8 +40,8 @@ class ParticipantAdmin(admin.ModelAdmin):
         "grade",
         "church",
         "parent_name",
-        "session__name",
-        "attendance_type__name",
+        "session",
+        "attendance_type",
     )
     list_filter = ("grade", "gender", "age")
     search_fields = ("first_name", "last_name", "parent_name", "church")
@@ -86,4 +86,4 @@ class AttendanceTypeAdmin(admin.ModelAdmin):
 
 @admin.register(models.Session)
 class SessionAdmin(admin.ModelAdmin):
-    list_display = ("name", "start_date", "end_date")
+    list_display = ("name", "description", "start_date", "end_date")
