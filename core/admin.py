@@ -32,6 +32,10 @@ class UserAdmin(BaseUserAdmin):
 
 @admin.register(models.Participant)
 class ParticipantAdmin(admin.ModelAdmin):
+    readonly_fields = (
+        "created",
+        "modified",
+    )
     list_display = (
         "first_name",
         "last_name",
@@ -59,6 +63,10 @@ class ParticipantAdmin(admin.ModelAdmin):
 
 @admin.register(models.Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
+    readonly_fields = (
+        "created",
+        "modified",
+    )
     list_display = (
         "first_name",
         "last_name",
