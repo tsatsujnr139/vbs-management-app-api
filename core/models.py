@@ -122,7 +122,7 @@ class Volunteer(models.Model):
 
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=6)
+    gender = models.CharField(max_length=6, choices=GENDER_OPTIONS)
     preferred_role = models.CharField(
         max_length=18, choices=VOLUNTEER_ROLE_OPTIONS
     )
