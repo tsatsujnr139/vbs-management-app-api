@@ -74,6 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "vbs_registration.wsgi.application"
 
+X_FRAME_OPTIONS = 'SAMEORIGIN'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -114,7 +115,7 @@ REST_FRAMEWORK = {
 }
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Library Admin",
+    "site_title": "VBS Admin",
     "site_header": "VBS Admin",
     "site_logo": None,
     "site_icon": None,
