@@ -99,11 +99,22 @@ class Participant(models.Model):
         "AttendanceType", on_delete=models.CASCADE
     )
     session = models.ForeignKey("Session", on_delete=models.CASCADE)
-    created = models.DateTimeField(default=now, editable=False)
-    modified = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.first_name + " " + self.last_name
+
+
+TEACHING = "Teaching"
+TEACHING_ASSISTANT = "Teaching Assistant"
+IT = "IT"
+
+VOLUNTEER_ROLE_OPTIONS = (
+    (TEACHING, "TEACHING"),
+    (TEACHING_ASSISTANT, "TEACHING ASSISTANT"),
+    (IT, "IT"),
+)
 
 
 class Volunteer(models.Model):
@@ -112,7 +123,9 @@ class Volunteer(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     gender = models.CharField(max_length=6)
-    preferred_role = models.CharField(max_length=14)
+    preferred_role = models.CharField(
+        max_length=18, choices=VOLUNTEER_ROLE_OPTIONS
+    )
     church = models.CharField(max_length=150, blank=False)
     preferred_class = models.CharField(max_length=10, blank=False)
     contact_no = models.CharField(max_length=12, blank=False)
@@ -120,8 +133,8 @@ class Volunteer(models.Model):
     email = models.EmailField(max_length=100, blank=True)
     previous_volunteer = models.BooleanField(default=False)
     previous_site = models.CharField(max_length=100, blank=True)
-    created = models.DateTimeField(default=now, editable=False)
-    modified = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.first_name + " " + self.last_name
@@ -143,8 +156,8 @@ class Session(models.Model):
 
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=250)
-    eligible_grades = models.ManyToManyField('Grade')
-    supported_attendance_types = models.ManyToManyField('AttendanceType')
+    eligible_grades = models.ManyToManyField("Grade")
+    supported_attendance_types = models.ManyToManyField("AttendanceType")
     start_date = models.DateField(null=False, blank=False)
     end_date = models.DateField(null=False, blank=False)
     created = models.DateTimeField(default=now, editable=False)
