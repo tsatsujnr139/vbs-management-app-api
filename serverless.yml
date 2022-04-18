@@ -1,0 +1,52 @@
+org: tsatsujnr
+app: vbs-app
+
+service: vbs-api
+useDotenv: true
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+  - serverless-dotenv-plugin
+
+custom:
+  dotenv:
+    logging: false
+  wsgi:
+    app: vbs_registration.wsgi.application
+    packRequirements: false
+  pythonRequirements:
+    dockerizePip: non-linux
+
+provider:
+  name: aws
+  runtime: python3.7
+  stage: dev
+  region: eu-west-1
+  deploymentBucket:
+    maxPreviousDeploymentArtifacts: 3
+
+functions:
+  app:
+    handler: wsgi_handler.handler
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
+
+package:
+  patterns:
+    - '!.env*'
+    - '!.git/**'
+    - '!.serverless/**'
+    - '!.cache/**'
+    - '!.pytest_cache/**'
+    - '!node_modules/**'
+    - '!venv/**'
+    - '!**/migrations/**'
+    - '!static/**'
+    - '!__pycache__/**'
+    - '!docker-compose.*'
+    - '!Dockerfile'
+    - '!settings/development.py'
+    - '!requirements/**'
+    - '!requirements.txt'

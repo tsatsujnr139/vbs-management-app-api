@@ -106,6 +106,7 @@ celerybeat.pid
 
 # Environments
 .env
+.env.dev
 .venv
 env/
 venv/
@@ -144,3 +145,6 @@ cython_debug/
 docker-compose.debug.yml
 static/
 staticfiles/
+/node_modules/
+
+.serverless

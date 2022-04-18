@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=["*"], cast=list)
 CORS_ORIGIN_ALLOW_ALL = True
 
 
@@ -82,10 +83,11 @@ X_FRAME_OPTIONS = 'SAMEORIGIN'
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.environ.get("DB_HOST"),
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": config("DB_HOST"),
+        "NAME": config("DB_NAME"),
+        "USER": config("DB_USER"),
+        "PASSWORD": config("DB_PASSWORD"),
+        "PORT": config("DB_PORT"),
     }
 }
 
@@ -108,6 +110,22 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'INFO',
+        },
+    },
+}
+
 # Pagination Configuration
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
@@ -120,7 +138,7 @@ JAZZMIN_SETTINGS = {
     "site_logo": None,
     "site_icon": None,
     "welcome_sign": "Welcome to the VBS Admin Interface!",
-    "copyright": "tsatsujnr",
+    "copyright": "LIC VBS",
     "search_model": "core.User",
     "related_modal_active": True,
     "show_ui_builder": True,
@@ -150,11 +168,10 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_URL = "/static/"
+STATIC_URL = f"{config('STAGE', default='')}/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+WHITENOISE_STATIC_PREFIX = '/static/'
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
 
 AUTH_USER_MODEL = "core.User"
 
