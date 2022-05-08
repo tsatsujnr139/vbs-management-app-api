@@ -27,7 +27,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Application definition
 
 INSTALLED_APPS = [
-    "jazzmin",
+    "jet",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -126,27 +126,12 @@ LOGGING = {
     },
 }
 
+JET_SIDE_MENU_COMPACT = True
+
 # Pagination Configuration
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 1000,
-}
-
-JAZZMIN_SETTINGS = {
-    "site_title": "VBS Admin",
-    "site_header": "VBS Admin",
-    "site_logo": None,
-    "site_icon": None,
-    "welcome_sign": "Welcome to the VBS Admin Interface!",
-    "copyright": "LIC VBS",
-    "search_model": "core.User",
-    "related_modal_active": True,
-    "show_ui_builder": True,
-}
-
-JAZZMIN_UI_TWEAKS = {
-    "theme": "yeti",
-    "dark_mode_theme": "",
 }
 
 ADMIN_EXPORT_ACTION = {"ENABLE_SITEWIDE": False}

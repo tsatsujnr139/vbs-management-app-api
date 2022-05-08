@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.conf import settings
 
 urlpatterns = [
+    path("jet/", include("jet.urls", "jet")),  # Django JET URLS
     path("admin/", admin.site.urls),
     path("api/user/", include("user.urls")),
     path("api/", include("participant.urls")),
