@@ -84,9 +84,9 @@ class Participant(models.Model):
         "Grade", to_field="name", on_delete=models.CASCADE
     )
     parent_name = models.CharField(max_length=100, blank=False)
-    primary_contact_no = models.CharField(max_length=12, blank=False)
-    alternate_contact_no = models.CharField(max_length=12, blank=False)
-    whatsApp_no = models.CharField(max_length=12, blank=True, null=True)
+    primary_contact_no = models.CharField(max_length=15, blank=False)
+    alternate_contact_no = models.CharField(max_length=15, blank=False)
+    whatsApp_no = models.CharField(max_length=15, blank=True, null=True)
     email = models.EmailField(max_length=100, blank=True)
     church = models.CharField(max_length=150, blank=False)
     pickup_person_name = models.CharField(
@@ -95,24 +95,22 @@ class Participant(models.Model):
     pickup_person_contact_no = models.CharField(
         max_length=12, blank=True, null=True
     )
-    attendance_type = models.ForeignKey(
-        "AttendanceType", on_delete=models.CASCADE
-    )
-    session = models.ForeignKey("Session", on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return f"{self.first_name} {self.last_name}"
 
 
 TEACHING = "Teaching"
 TEACHING_ASSISTANT = "Teaching Assistant"
+SPECIAL_NEEDS = "Special Needs"
 IT = "IT"
 
 VOLUNTEER_ROLE_OPTIONS = (
     (TEACHING, "TEACHING"),
     (TEACHING_ASSISTANT, "TEACHING ASSISTANT"),
+    (SPECIAL_NEEDS, "SPECIAL NEEDS"),
     (IT, "IT"),
 )
 
@@ -128,8 +126,8 @@ class Volunteer(models.Model):
     )
     church = models.CharField(max_length=150, blank=False)
     preferred_class = models.CharField(max_length=10, blank=False)
-    contact_no = models.CharField(max_length=12, blank=False)
-    whatsApp_no = models.CharField(max_length=12, blank=True)
+    contact_no = models.CharField(max_length=13, blank=False)
+    whatsApp_no = models.CharField(max_length=13, blank=True)
     email = models.EmailField(max_length=100, blank=True)
     previous_volunteer = models.BooleanField(default=False)
     previous_site = models.CharField(max_length=100, blank=True)
@@ -137,7 +135,7 @@ class Volunteer(models.Model):
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        return f"{self.first_name} {self.last_name}"
 
 
 class AttendanceType(models.Model):

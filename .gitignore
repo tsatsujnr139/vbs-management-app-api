@@ -148,3 +148,4 @@ staticfiles/
 /node_modules/
 
 .serverless
+!/.env.{stage}
