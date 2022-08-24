@@ -51,7 +51,7 @@ class ParticipantAdmin(admin.ModelAdmin):
         "age",
     )
     search_fields = ("first_name", "last_name", "parent_name", "church")
-
+    list_max_show_all = 1200
     actions = [
         export_selected_objects,
     ]
@@ -78,6 +78,7 @@ class VolunteerAdmin(admin.ModelAdmin):
         "previous_site",
     )
     search_fields = ("first_name", "last_name")
+    list_max_show_all = 1200
 
     actions = [
         export_selected_objects,
@@ -116,8 +117,9 @@ class ParticipantAttendanceAdmin(admin.ModelAdmin):
     )
 
     list_filter = ("participant__grade",)
-
     search_fields = ("participant__first_name", "participant__last_name")
+    list_max_show_all = 1200
+
 
     @admin.display()
     def first_name(self, obj):
@@ -152,7 +154,9 @@ class ParticipantPickupAdmin(admin.ModelAdmin):
         "day_5",
     )
 
+    list_filter = ("participant__grade",)
     search_fields = ("participant__first_name", "participant__last_name")
+    list_max_show_all = 1200
 
     actions = [
         export_selected_objects,
