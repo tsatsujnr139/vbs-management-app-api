@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+
 from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -150,6 +151,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+EVENT_DATES = config("EVENT_DATES", cast=lambda v: [s.strip() for s in v.split(",")])
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/

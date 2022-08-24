@@ -1,9 +1,9 @@
+from admin_export_action.admin import export_selected_objects
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext as _
-from core import models
 
-from admin_export_action.admin import export_selected_objects
+from core import models
 
 
 @admin.register(models.User)
@@ -97,3 +97,75 @@ class AttendanceTypeAdmin(admin.ModelAdmin):
 @admin.register(models.Session)
 class SessionAdmin(admin.ModelAdmin):
     list_display = ("name", "description", "start_date", "end_date")
+
+
+@admin.register(models.ParticipantAttendance)
+class ParticipantAttendanceAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        return models.ParticipantAttendance.objects.all().select_related("participant")
+
+    list_display = (
+        "first_name",
+        "last_name",
+        "grade",
+        "day_1",
+        "day_2",
+        "day_3",
+        "day_4",
+        "day_5",
+    )
+
+    list_filter = ("participant__grade",)
+
+    search_fields = ("participant__first_name", "participant__last_name")
+
+    @admin.display()
+    def first_name(self, obj):
+        return obj.participant.first_name
+
+    @admin.display()
+    def last_name(self, obj):
+        return obj.participant.last_name
+
+    @admin.display()
+    def grade(self, obj):
+        return obj.participant.grade
+
+    actions = [
+        export_selected_objects,
+    ]
+
+
+@admin.register(models.ParticipantPickup)
+class ParticipantPickupAdmin(admin.ModelAdmin):
+    def get_queryset(self, request):
+        return models.ParticipantPickup.objects.all().select_related("participant")
+
+    list_display = (
+        "first_name",
+        "last_name",
+        "grade",
+        "day_1",
+        "day_2",
+        "day_3",
+        "day_4",
+        "day_5",
+    )
+
+    search_fields = ("participant__first_name", "participant__last_name")
+
+    actions = [
+        export_selected_objects,
+    ]
+
+    @admin.display()
+    def first_name(self, obj):
+        return obj.participant.first_name
+
+    @admin.display()
+    def last_name(self, obj):
+        return obj.participant.last_name
+
+    @admin.display()
+    def grade(self, obj):
+        return obj.participant.grade

@@ -1,27 +1,33 @@
-from django.utils.timezone import now
+from datetime import date, datetime
+
+from django.conf import settings
 from django.db.models import Count
-from rest_framework import viewsets, mixins, pagination
+from django.http import JsonResponse
+from django.utils.timezone import now
+from rest_framework import mixins, pagination, status, viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from participant import permissions
 
-
-from participant.serializers import (
-    GradeSerializer,
-    ChurchSerializer,
-    ParticipantSerializer,
-    VolunteerSerializer,
-    AttendanceTypeSerializer,
-    SessionSerializer,
-)
-
+from core.constants import EVENT_DAY_TO_DATE_MAPPING
 from core.models import (
-    Grade,
-    Church,
-    Participant,
-    Volunteer,
     AttendanceType,
+    Church,
+    Grade,
+    Participant,
+    ParticipantAttendance,
+    ParticipantPickup,
     Session,
+    Volunteer,
+)
+from participant import permissions
+from participant.serializers import (
+    AttendanceTypeSerializer,
+    ChurchSerializer,
+    GradeSerializer,
+    ParticipantSerializer,
+    SessionSerializer,
+    VolunteerSerializer,
 )
 
 
@@ -72,6 +78,68 @@ class ParticipantViewset(viewsets.ModelViewSet):
         if last_name is not None:
             queryset = queryset.filter(last_name__icontains=last_name)
         return queryset
+
+    @action(detail=True, methods=["post"])
+    def admit(self, request, pk=None, id=None):
+        today = date.today()
+        today_str = f"{today:%d-%m-%Y}"
+        if f"{today_str}" not in settings.EVENT_DATES:
+            return JsonResponse(
+                {
+                    "detail": "You can only record attendance on a valid VBS date for this year"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        # Get day mapping for date
+        today_event = EVENT_DAY_TO_DATE_MAPPING[today_str]
+        day_filter_is_null = f"{today_event}__isnull"
+        if ParticipantAttendance.objects.filter(
+            participant=self.get_object(), **{day_filter_is_null: False}
+        ):
+            return JsonResponse(
+                {
+                    "detail": "This participant has already been marked as present for today."
+                },
+                status=200,
+            )
+
+        ParticipantAttendance.objects.create(
+            participant=self.get_object(), **{today_event: datetime.now()}
+        )
+        return JsonResponse(
+            {"detail": "Attendance recorded successfully"}, status=status.HTTP_200_OK
+        )
+
+    @action(detail=True, methods=["post"])
+    def pickup(self, request, pk=None, id=None):
+        today = date.today()
+        today_str = f"{today:%d-%m-%Y}"
+        if f"{today_str}" not in settings.EVENT_DATES:
+            return JsonResponse(
+                {
+                    "detail": "You can only record pickup on a valid VBS date for this year"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        # Get day mapping for date
+        today_event = EVENT_DAY_TO_DATE_MAPPING[today_str]
+        day_filter_is_null = f"{today_event}__isnull"
+        if ParticipantPickup.objects.filter(
+            participant=self.get_object(), **{day_filter_is_null: False}
+        ):
+            return JsonResponse(
+                {
+                    "detail": "This participant has already been marked as picked up today."
+                },
+                status=202,
+            )
+
+        ParticipantPickup.objects.create(
+            participant=self.get_object(), **{today_event: datetime.now()}
+        )
+        return JsonResponse(
+            {"detail": "Pickup recorded successfully"}, status=status.HTTP_200_OK
+        )
 
 
 class VolunteerViewSet(viewsets.ModelViewSet):

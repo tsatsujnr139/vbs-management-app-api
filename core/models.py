@@ -1,10 +1,10 @@
-from django.db import models
-from django.utils.timezone import now
 from django.contrib.auth.models import (
     AbstractBaseUser,
-    PermissionsMixin,
     BaseUserManager,
+    PermissionsMixin,
 )
+from django.db import models
+from django.utils.timezone import now
 
 
 class UserManager(BaseUserManager):
@@ -147,6 +147,28 @@ class AttendanceType(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class BaseParticipantAttendance(models.Model):
+    """Model definition to record attendance and pickup for the VBS duration"""
+
+    participant = models.OneToOneField("participant", on_delete=models.DO_NOTHING)
+    day_1 = models.DateTimeField(null=True, blank=True)
+    day_2 = models.DateTimeField(null=True, blank=True)
+    day_3 = models.DateTimeField(null=True, blank=True)
+    day_4 = models.DateTimeField(null=True, blank=True)
+    day_5 = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class ParticipantAttendance(BaseParticipantAttendance):
+    pass
+
+
+class ParticipantPickup(BaseParticipantAttendance):
+    pass
 
 
 class Session(models.Model):
