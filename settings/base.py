@@ -28,7 +28,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 # Application definition
 
 INSTALLED_APPS = [
-    "jet",
+    "more_admin_filters",
+    "rangefilter",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -127,7 +128,7 @@ LOGGING = {
     },
 }
 
-JET_SIDE_MENU_COMPACT = True
+# JET_SIDE_MENU_COMPACT = True
 
 # Pagination Configuration
 REST_FRAMEWORK = {
@@ -152,6 +153,8 @@ USE_L10N = True
 USE_TZ = True
 
 EVENT_DATES = config("EVENT_DATES", cast=lambda v: [s.strip() for s in v.split(",")])
+SMS_ENDPOINT = config("SMS_ENDPOINT")
+SMS_API_KEY = config("SMS_API_KEY")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/

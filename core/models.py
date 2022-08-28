@@ -168,7 +168,22 @@ class ParticipantAttendance(BaseParticipantAttendance):
 
 
 class ParticipantPickup(BaseParticipantAttendance):
-    pass
+    day_1_pickup_person = models.CharField(max_length=150, null=True, blank=True)
+    day_2_pickup_person = models.CharField(max_length=150, null=True, blank=True)
+    day_3_pickup_person = models.CharField(max_length=150, null=True, blank=True)
+    day_4_pickup_person = models.CharField(max_length=150, null=True, blank=True)
+    day_5_pickup_person = models.CharField(max_length=150, null=True, blank=True)
+
+
+class PickupCode(models.Model):
+    """Model definition for pickup code"""
+
+    participant = models.OneToOneField("Participant", on_delete=models.DO_NOTHING)
+    day_1 = models.CharField(max_length=5, db_index=True)
+    day_2 = models.CharField(max_length=5, db_index=True)
+    day_3 = models.CharField(max_length=5, db_index=True)
+    day_4 = models.CharField(max_length=5, db_index=True)
+    day_5 = models.CharField(max_length=5, db_index=True)
 
 
 class Session(models.Model):

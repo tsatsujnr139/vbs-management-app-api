@@ -2,6 +2,8 @@ from admin_export_action.admin import export_selected_objects
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext as _
+from more_admin_filters import MultiSelectRelatedDropdownFilter
+from rangefilter.filters import DateRangeFilter
 
 from core import models
 
@@ -44,11 +46,11 @@ class ParticipantAdmin(admin.ModelAdmin):
         "grade",
         "church",
         "parent_name",
+        "created",
     )
     list_filter = (
-        "grade",
-        "gender",
-        "age",
+        ("grade", MultiSelectRelatedDropdownFilter),
+        ("created", DateRangeFilter),
     )
     search_fields = ("first_name", "last_name", "parent_name", "church")
     list_max_show_all = 1200
@@ -70,12 +72,14 @@ class VolunteerAdmin(admin.ModelAdmin):
         "email",
         "previous_volunteer",
         "church",
+        "created",
     )
     list_filter = (
         "preferred_role",
         "preferred_class",
         "previous_volunteer",
         "previous_site",
+        "created",
     )
     search_fields = ("first_name", "last_name")
     list_max_show_all = 1200

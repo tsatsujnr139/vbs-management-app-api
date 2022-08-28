@@ -1,15 +1,17 @@
-from datetime import date, datetime
+import random
+from datetime import date, timezone
 
 from django.conf import settings
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import JsonResponse
-from django.utils.timezone import now
+from django.utils import timezone
 from rest_framework import mixins, pagination, status, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from core.constants import EVENT_DAY_TO_DATE_MAPPING
+from core.messaging import send_attendance_message, send_pickup_message
 from core.models import (
     AttendanceType,
     Church,
@@ -17,6 +19,7 @@ from core.models import (
     Participant,
     ParticipantAttendance,
     ParticipantPickup,
+    PickupCode,
     Session,
     Volunteer,
 )
@@ -70,13 +73,28 @@ class ParticipantViewset(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """retrieve participants list for authenticated user"""
-        queryset = Participant.objects.all().order_by("-id")
+        queryset = (
+            Participant.objects.all()
+            .order_by("-id")
+            .select_related(
+                "grade", "participantattendance", "participantpickup", "pickupcode"
+            )
+        )
         grade = self.request.query_params.get("grade", None)
-        last_name = self.request.query_params.get("last_name", None)
-        if grade is not None:
-            queryset = queryset.filter(grade=grade)
-        if last_name is not None:
-            queryset = queryset.filter(last_name__icontains=last_name)
+        q = self.request.query_params.get("q", None)
+        if grade:
+            queryset = queryset.filter(grade__name=grade)
+        if q:
+            today = date.today()
+            today_str = f"{today:%d-%m-%Y}"
+            today_event = EVENT_DAY_TO_DATE_MAPPING[today_str]
+            day_pickup_code = f"pickupcode__{today_event}"
+            queryset = queryset.filter(
+                Q(last_name__icontains=q)
+                | Q(first_name__icontains=q)
+                | Q(**{day_pickup_code: q})
+            )
+
         return queryset
 
     @action(detail=True, methods=["post"])
@@ -102,9 +120,17 @@ class ParticipantViewset(viewsets.ModelViewSet):
                 },
                 status=200,
             )
+        ParticipantAttendance.objects.update_or_create(
+            participant=self.get_object(), defaults={**{today_event: timezone.now()}}
+        )
+        # Create participant pickup code record
+        pickup_code = random.randint(10000, 99999)
+        PickupCode.objects.update_or_create(
+            participant=self.get_object(), defaults={**{today_event: pickup_code}}
+        )
 
-        ParticipantAttendance.objects.create(
-            participant=self.get_object(), **{today_event: datetime.now()}
+        send_attendance_message(
+            participant=self.get_object(), vbs_day=today_event, pickup_code=pickup_code
         )
         return JsonResponse(
             {"detail": "Attendance recorded successfully"}, status=status.HTTP_200_OK
@@ -121,6 +147,12 @@ class ParticipantViewset(viewsets.ModelViewSet):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
+
+        if not request.data.get("pickup_person"):
+            return JsonResponse(
+                {"detail": "Please enter the pickup person's name"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         # Get day mapping for date
         today_event = EVENT_DAY_TO_DATE_MAPPING[today_str]
         day_filter_is_null = f"{today_event}__isnull"
@@ -129,13 +161,25 @@ class ParticipantViewset(viewsets.ModelViewSet):
         ):
             return JsonResponse(
                 {
-                    "detail": "This participant has already been marked as picked up today."
+                    "detail": "This participant has already been marked as picked up for today."
                 },
                 status=202,
             )
 
-        ParticipantPickup.objects.create(
-            participant=self.get_object(), **{today_event: datetime.now()}
+        day_pickup_person = f"{today_event}_pickup_person"
+        ParticipantPickup.objects.update_or_create(
+            participant=self.get_object(),
+            defaults={
+                **{
+                    day_pickup_person: request.data.get("pickup_person"),
+                    today_event: timezone.now(),
+                }
+            },
+        )
+        send_pickup_message(
+            participant=self.get_object(),
+            vbs_day=today_event,
+            pickup_person=request.data.get("pickup_person"),
         )
         return JsonResponse(
             {"detail": "Pickup recorded successfully"}, status=status.HTTP_200_OK
@@ -180,7 +224,7 @@ class DashboardDataViewSet(viewsets.ViewSet):
         participant_queryset = Participant.objects.all()
         volunteer_queryset = Volunteer.objects.all()
 
-        year, week, _ = now().isocalendar()
+        year, week, _ = timezone.now().isocalendar()
 
         participants_this_week_queryset = participant_queryset.filter(
             created__iso_year=year, created__week=week
