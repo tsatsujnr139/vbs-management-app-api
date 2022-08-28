@@ -148,11 +148,11 @@ class ParticipantViewset(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        if not request.data.get("pickup_person"):
-            return JsonResponse(
-                {"detail": "Please enter the pickup person's name"},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        # if not request.data.get("pickup_person"):
+        #     return JsonResponse(
+        #         {"detail": "Please enter the pickup person's name"},
+        #         status=status.HTTP_400_BAD_REQUEST,
+        #     )
         # Get day mapping for date
         today_event = EVENT_DAY_TO_DATE_MAPPING[today_str]
         day_filter_is_null = f"{today_event}__isnull"
@@ -166,12 +166,12 @@ class ParticipantViewset(viewsets.ModelViewSet):
                 status=202,
             )
 
-        day_pickup_person = f"{today_event}_pickup_person"
+        # day_pickup_person = f"{today_event}_pickup_person"
         ParticipantPickup.objects.update_or_create(
             participant=self.get_object(),
             defaults={
                 **{
-                    day_pickup_person: request.data.get("pickup_person"),
+                    # day_pickup_person: request.data.get("pickup_person"),
                     today_event: timezone.now(),
                 }
             },

@@ -9,7 +9,7 @@ apiKey = settings.SMS_API_KEY
 
 def send_attendance_message(participant: Participant, vbs_day: str, pickup_code: int):
     message = (
-        f"Dear VBS Parent/Guardian\n,"
+        f"Dear {participant.parent_name},\n"
         f"{participant.first_name} {participant.last_name} has been marked as present for VBS {vbs_day.replace('_', ' ')}. "
         f"Your pickup code for this participant is {pickup_code} for VBS {vbs_day.replace('_', ' ')}. "
         f"Please keep this code handy when picking up your ward because it will be required to confirm pickup rights."
@@ -19,10 +19,10 @@ def send_attendance_message(participant: Participant, vbs_day: str, pickup_code:
 
 def send_pickup_message(participant: Participant, vbs_day: str, pickup_person: str):
     message = (
-        f"Dear VBS Parent/Guardian,\n "
+        f"Dear {participant.parent_name},\n "
         f"{participant.first_name} {participant.last_name} has been picked up from the LIC premises "
-        f"for VBS {vbs_day.replace('_', ' ')}. by {pickup_person}. "
-        f"Please contact LIC VBS Admin on 020 8888 8888 "
+        f"for VBS {vbs_day.replace('_', ' ')}. "
+        f"Please contact LIC VBS Admin on 0206052429 / 0208207958 / 0249333630 "
         f"immediately if this is unexpected or you have any questions or concerns."
     )
     send_sms(phone_number=participant.primary_contact_no, message=message)
