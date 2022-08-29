@@ -3,6 +3,7 @@ from datetime import date, timezone
 
 from django.conf import settings
 from django.db.models import Count, Q
+from django.db.models.functions import Lower
 from django.http import JsonResponse
 from django.utils import timezone
 from rest_framework import mixins, pagination, status, viewsets
@@ -75,7 +76,7 @@ class ParticipantViewset(viewsets.ModelViewSet):
         """retrieve participants list for authenticated user"""
         queryset = (
             Participant.objects.all()
-            .order_by("-id")
+            .order_by(Lower("first_name"))
             .select_related(
                 "grade", "participantattendance", "participantpickup", "pickupcode"
             )
