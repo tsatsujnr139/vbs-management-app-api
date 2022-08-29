@@ -20,7 +20,7 @@ def send_attendance_message(participant: Participant, vbs_day: str, pickup_code:
 def send_pickup_message(participant: Participant, vbs_day: str, pickup_person: str):
     message = (
         f"Dear {participant.parent_name},\n "
-        f"{participant.first_name} {participant.last_name} has been picked up from the LIC premises "
+        f"{participant.first_name} {participant.last_name} ({participant.grade}) has been picked up from the LIC premises "
         f"for VBS {vbs_day.replace('_', ' ')}. "
         f"Please contact LIC VBS Admin on 0206052429 / 0208207958 / 0249333630 "
         f"immediately if this is unexpected or you have any questions or concerns."
