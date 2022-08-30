@@ -123,7 +123,7 @@ class ParticipantAttendanceAdmin(admin.ModelAdmin):
     list_filter = ("participant__grade",)
     search_fields = ("participant__first_name", "participant__last_name")
     list_max_show_all = 1200
-
+    raw_id_fields = ["participant"]
 
     @admin.display()
     def first_name(self, obj):
@@ -161,6 +161,7 @@ class ParticipantPickupAdmin(admin.ModelAdmin):
     list_filter = ("participant__grade",)
     search_fields = ("participant__first_name", "participant__last_name")
     list_max_show_all = 1200
+    raw_id_fields = ["participant"]
 
     actions = [
         export_selected_objects,
