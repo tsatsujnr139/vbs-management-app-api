@@ -52,7 +52,7 @@ class ParticipantAdmin(admin.ModelAdmin):
         ("grade", MultiSelectRelatedDropdownFilter),
         ("created", DateRangeFilter),
     )
-    search_fields = ("first_name", "last_name", "parent_name", "church")
+    search_fields = ("first_name", "last_name")
     list_max_show_all = 1200
     actions = [
         export_selected_objects,
